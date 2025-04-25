@@ -1,0 +1,59 @@
+# Smithery configuration file: https://smithery.ai/docs/config#smitheryyaml
+
+startCommand:
+  type: stdio
+  configSchema:
+    # JSON Schema defining the configuration options for the MCP.
+    type: object
+    required:
+      - graphqlEndpoint
+      - graphqlSchemas
+      - graphqlApiKey
+      - itemServiceUsername
+      - itemServicePassword
+      - itemServiceServerUrl
+    properties:
+      transport:
+        type: string
+        default: stdio
+        description: "Transport protocol: stdio or sse"
+      graphqlEndpoint:
+        type: string
+        description: Sitecore GraphQL endpoint URL
+      graphqlSchemas:
+        type: string
+        description: Comma-separated GraphQL schemas
+      graphqlApiKey:
+        type: string
+        description: API key for GraphQL
+      graphqlHeaders:
+        type: string
+        default: ""
+        description: Additional headers for GraphQL requests
+      itemServiceDomain:
+        type: string
+        default: sitecore
+        description: Domain for Item Service API
+      itemServiceUsername:
+        type: string
+        description: Username for Item Service API
+      itemServicePassword:
+        type: string
+        description: Password for Item Service API
+      itemServiceServerUrl:
+        type: string
+        description: Base URL for Item Service API
+  commandFunction:
+    # A JS function that produces the CLI command based on the given config to start the MCP on stdio.
+    |-
+    (config) => ({ command: 'node', args: ['dist/index.js'], env: { TRANSPORT: config.transport, GRAPHQL_ENDPOINT: config.graphqlEndpoint, GRAPHQL_SCHEMAS: config.graphqlSchemas, GRAPHQL_API_KEY: config.graphqlApiKey, GRAPHQL_HEADERS: config.graphqlHeaders, ITEM_SERVICE_DOMAIN: config.itemServiceDomain, ITEM_SERVICE_USERNAME: config.itemServiceUsername, ITEM_SERVICE_PASSWORD: config.itemServicePassword, ITEM_SERVICE_SERVER_URL: config.itemServiceServerUrl } })
+  exampleConfig:
+    transport: stdio
+    graphqlEndpoint: https://example.com/sitecore/api/graph/
+    graphqlSchemas: edge,master,core
+    graphqlApiKey: 6D3F291E-66A5-4703-887A-D549AF83D859
+    graphqlHeaders: ""
+    itemServiceDomain: sitecore
+    itemServiceUsername: admin
+    itemServicePassword: password
+    itemServiceServerUrl: https://example.com/
