@@ -1,6 +1,7 @@
 # Model Context Protocol server for Sitecore
 
 ![Build](https://github.com/antonytm/mcp-sitecore-server/actions/workflows/publish-npm.yml/badge.svg)
+[![smithery badge](https://smithery.ai/badge/@Antonytm/mcp-sitecore-server)](https://smithery.ai/server/@Antonytm/mcp-sitecore-server)
 
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -26,6 +27,14 @@
 - [ ] Sitecore CLI
 
 ## Installation
+
+### Installing via Smithery
+
+To install Sitecore Server for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@Antonytm/mcp-sitecore-server):
+
+```bash
+npx -y @smithery/cli install @Antonytm/mcp-sitecore-server --client claude
+```
 
 Add the following Model Context Protocol server to your Cursor, VS Code, Claud:
 
