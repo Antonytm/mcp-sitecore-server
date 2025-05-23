@@ -13,10 +13,10 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "types": ["node"],
-    "verbatimModuleSyntax": true,
-    "incremental": false,
+    "verbatimModuleSyntax": true,    "incremental": false,
     "sourceMap": true,
     "declaration": true,
+    "declarationDir": "./dist",
   },
   "include": ["./src/**/*"],
   "exclude": ["node_modules", "dist"]

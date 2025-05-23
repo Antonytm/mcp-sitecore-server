@@ -1,3 +1,4 @@
+@ -0,0 +1,28 @@
 name: Publish @antonytm/mcp-sitecore-server to NPM registry
 on:
   release:
@@ -18,7 +19,9 @@ jobs:
         run: npm install
       - name: Build package
         working-directory: .
-        run: npm run build
+        run: |
+          npm run build
+          npm run build:types
       - name: Publish package on NPM 📦
         working-directory: .
         run: npm publish
