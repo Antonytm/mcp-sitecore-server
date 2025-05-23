@@ -1,6 +1,6 @@
 {
   "name": "@antonytm/mcp-sitecore-server",
-  "version": "0.8.1-bundle",
+  "version": "0.8.2-bundle",
   "description": "A Model Context Protocol server for Sitecore",
   "files": [
     "dist",

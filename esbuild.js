@@ -18,13 +18,6 @@ const defaultOptions = {
   outfile: './dist/bundle.js',  format: 'esm',
   minify: false,
   sourcemap: true,
-  external: [
-    // External packages that shouldn't be bundled
-    '@antonytm/clixml-parser',
-    '@modelcontextprotocol/sdk',
-    'graphql',
-    'express'
-  ]
 };
 
 if (watch) {
