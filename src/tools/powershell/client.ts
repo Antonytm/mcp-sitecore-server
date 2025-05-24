@@ -1,4 +1,5 @@
 import { convertObject, parseXMLString } from "@antonytm/clixml-parser";
+import { generateUUID } from "./utils";
 
 class PowershellClient {
     private serverUrl: string;
@@ -16,7 +17,7 @@ class PowershellClient {
     }
 
     async executeScript(script: string, parameters: Record<string, any> = {}): Promise<any> {
-        const uuid = crypto.randomUUID();
+        const uuid = generateUUID();
         const url = `${this.serverUrl}/-/script/script/?sessionId=${uuid}&rawOutput=False&persistentSession=False `;
         const headers = {
             'Authorization': this.bearertoken || '',
