@@ -40,6 +40,17 @@ const ConfigSchema = z.object({
         password: "b",
         serverUrl: "https://xmcloudcm.localhost/",
     }),
+    file: z.object({
+        domain: z.string(),
+        username: z.string(),
+        password: z.string(),
+        serverUrl: z.string().url(),
+    }).default({
+        domain: "sitecore",
+        username: "admin",
+        password: "b",
+        serverUrl: "https://xmcloudcm.localhost/",
+    }),
     authorizationHeader: z.string().default("")
 });
 
@@ -56,6 +67,10 @@ export const envSchema = z.object({
     POWERSHELL_USERNAME: z.string().optional(),
     POWERSHELL_PASSWORD: z.string().optional(),
     POWERSHELL_SERVER_URL: z.string().url().optional(),
+    FILE_DOMAIN: z.string().optional(),
+    FILE_USERNAME: z.string().optional(),
+    FILE_PASSWORD: z.string().optional(),
+    FILE_SERVER_URL: z.string().url().optional(),
     AUTORIZATION_HEADER: z.string().optional(),
 });
 
@@ -103,6 +118,12 @@ const config: Config = {
         username: ENV.POWERSHELL_USERNAME || "admin",
         password: ENV.POWERSHELL_PASSWORD || "b",
         serverUrl: ENV.POWERSHELL_SERVER_URL || "https://xmcloudcm.localhost/",
+    },
+    file: {
+        domain: ENV.FILE_DOMAIN || "sitecore",
+        username: ENV.FILE_USERNAME || "admin",
+        password: ENV.FILE_PASSWORD || "b",
+        serverUrl: ENV.FILE_SERVER_URL || "https://xmcloudcm.localhost/",
     },
     authorizationHeader: ENV.AUTORIZATION_HEADER || "",
 };

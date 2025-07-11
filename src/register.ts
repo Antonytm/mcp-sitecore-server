@@ -124,7 +124,9 @@ import { removeRenderingParameterByPathPowershellTool } from "./tools/powershell
 import { setRenderingParameterByIdPowershellTool } from "./tools/powershell/composite/presentation/set-rendering-parameter-by-id.js";
 import { setRenderingParameterByPathPowershellTool } from "./tools/powershell/composite/presentation/set-rendering-parameter-by-path.js";
 import { getLogsPowerShellTool } from "./tools/powershell/composite/logging/get-logs.js";
-
+import { downloadFileTool } from "./tools/file/simple/file-download.js";
+import { createPackageByItemIdPowershellTool } from "./tools/powershell/composite/packaging/create-package-by-item-id.js";
+import { createPackageByItemPathPowershellTool } from "./tools/powershell/composite/packaging/create-package-by-item-path.js";
 export async function register(array: Array<(server: McpServer, config: Config) => void>,
     server: McpServer,
     config: Config) {
@@ -266,6 +268,11 @@ export async function registerAll(server: McpServer, config: Config) {
         setRenderingParameterByIdPowershellTool,
         setRenderingParameterByPathPowershellTool,
 
+        // Packaging
+        // Composite Packaging PowerShell Tools
+        createPackageByItemIdPowershellTool,
+        createPackageByItemPathPowershellTool,
+
         //Logging
         getLogsPowerShellTool,
 
@@ -283,6 +290,10 @@ export async function registerAll(server: McpServer, config: Config) {
         initializeSearchIndexingItemByPathPowerShellTool,
         removeSearchIndexItemByIdPowerShellTool,
         removeSearchIndexItemByPathPowerShellTool,
+
+        // File
+        // Simple File Tools
+        downloadFileTool,
 
     ], server, config);
 }
