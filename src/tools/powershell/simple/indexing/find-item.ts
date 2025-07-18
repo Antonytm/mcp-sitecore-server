@@ -101,7 +101,9 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                     filter: z.enum(filterValues as [string, ...string[]]).describe("The type of filter to apply to the search criteria."),
                     field: z.enum(
                         [...allFieldsCommandResult] as [string, ...string[]]
-                    ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}`),
+                    ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}.
+                    _fullPath is the field to search by the item path.
+                    _haslayout_b is the field to check if an item has presentation details or layout.`),
                     value: z.string().describe("The value to search for."),
 
                 })
