@@ -13,6 +13,12 @@ This folder contains implementations of MCP tools that interact with Sitecore Po
 - **composite**: contains composite implementations that combine multiple PowerShell commands
 - **user**: use this folder for combining your own MCP tools implementations
 
+
+## Base Tools
+
+- `get-powershell-documentation`: Return the documentation describing all Sitecore Powershell commands
+- `run-powershell-script`: Run a PowerShell script and returns the output
+
 ## Security Tools
 
 ### User Management

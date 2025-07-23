@@ -3,6 +3,7 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import alias from '@rollup/plugin-alias';
 import path from 'path';
+import copy from 'rollup-plugin-copy'
 
 export default {
   input: 'dist/index.js',
@@ -19,6 +20,11 @@ export default {
     alias({
       entries: [
         { find: '@', replacement: path.resolve('dist') }
+      ]
+    }),
+    copy({
+      targets: [
+        { src: 'src/tools/powershell/documentation/**/*.md', dest: 'dist/tools/powershell/documentation' }
       ]
     })
   ],

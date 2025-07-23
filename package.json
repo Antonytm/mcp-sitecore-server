@@ -50,6 +50,7 @@
     "cross-env": "^7.0.3",
     "express": "^5.1.0",
     "rollup": "^4.44.2",
+    "rollup-plugin-copy": "^3.5.0",
     "ts-node": "^10.9.2",
     "tsc-alias": "^1.8.16",
     "typescript": "^5.8.3",

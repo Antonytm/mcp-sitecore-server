@@ -79,6 +79,8 @@ import { getItemReferrerByIdPowerShellTool } from "./tools/powershell/simple/com
 import { getItemReferrerByPathPowerShellTool } from "./tools/powershell/simple/common/get-item-referrer-by-path.js";
 import { getItemWorkflowEventByIdPowerShellTool } from "./tools/powershell/simple/common/get-item-workflow-event-by-id.js";
 import { getItemWorkflowEventByPathPowerShellTool } from "./tools/powershell/simple/common/get-item-workflow-event-by-path.js";
+import { getPowershellDocumentationTool } from "./tools/powershell/get-powershell-documentation.js";
+import { runPowershellScriptTool } from "./tools/powershell/run-powershell-script.js";
 import { getSitecoreJobPowerShellTool } from "./tools/powershell/simple/common/get-sitecore-job.js";
 import { addItemVersionByIdPowerShellTool } from "./tools/powershell/simple/common/add-item-version-by-id.js";
 import { addItemVersionByPathPowerShellTool } from "./tools/powershell/simple/common/add-item-version-by-path.js";
@@ -169,6 +171,9 @@ export async function registerAll(server: McpServer, config: Config) {
         getLanguagesTool,     
 
         //PowerShell tools
+        getPowershellDocumentationTool,
+        runPowershellScriptTool,
+
         //Security
         //Simple Security PowerShell Tools
         getUserByIdentityPowerShellTool,
