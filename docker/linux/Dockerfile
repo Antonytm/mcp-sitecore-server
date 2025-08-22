@@ -10,6 +10,8 @@ RUN npm install --ignore-scripts
 COPY src ./src
 RUN npm run build
 
+RUN npm run bundle
+
 # Remove dev dependencies
 RUN npm prune --production
 
