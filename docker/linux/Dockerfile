@@ -3,7 +3,7 @@ FROM node:lts-alpine
 WORKDIR /app
 
 # Install dependencies without prepare scripts
-COPY package*.json tsconfig.json ./
+COPY package*.json tsconfig.json rollup.config.js ./
 RUN npm install --ignore-scripts
 
 # Build application

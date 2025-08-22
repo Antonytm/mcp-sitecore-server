@@ -12,7 +12,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: antonytm/mcp-sitecore-linux
-          tags: 1.2.0, latest
+          tags: 1.2.1, latest
           registry: docker.io
           dockerfile: ./docker/linux/Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
