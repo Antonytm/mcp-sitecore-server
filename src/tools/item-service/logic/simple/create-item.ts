@@ -19,6 +19,7 @@ export async function createItem(conf: Config,
         conf.itemService.username,
         conf.itemService.password,
         conf.itemService.domain,
+        conf.logLevel
     );
 
     const response = await client.createItem(parentPath, data, options);

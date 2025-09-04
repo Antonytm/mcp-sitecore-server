@@ -1,3 +1,5 @@
+import { LogLevel } from "../../logLevel.js";
+
 class RestfulItemServiceClient {
     private serverUrl: string;
     private username: string;
@@ -5,12 +7,14 @@ class RestfulItemServiceClient {
     private domain: string;
     private authCookie: string | null = null;
     private isInitialized: boolean = false;
+    private logLevel: string;
 
-    constructor(serverUrl: string, username: string, password: string, domain: string = 'sitecore') {
+    constructor(serverUrl: string, username: string, password: string, domain: string = 'sitecore', logLevel: string = LogLevel.INFO) {
         this.serverUrl = serverUrl;
         this.username = username;
         this.password = password;
         this.domain = domain;
+        this.logLevel = logLevel;
     }
 
     /**
@@ -19,13 +23,25 @@ class RestfulItemServiceClient {
      */
     async initialize(): Promise<void> {
         if (!this.isInitialized) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Initializing client...', JSON.stringify({
+                    serverUrl: this.serverUrl,
+                    username: this.username,
+                    domain: this.domain
+                }, null, '\t'));
+            }
             try {
                 await this.login();
                 this.isInitialized = true;
+                if (this.logLevel === LogLevel.DEBUG) {
+                    console.log('Item Service Client: Successfully initialized');
+                }
             } catch (error) {
                 console.error('Failed to initialize client:', error);
                 throw error;
             }
+        } else if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Already initialized, skipping initialization');
         }
     }
 
@@ -35,19 +51,34 @@ class RestfulItemServiceClient {
      */
     async login(): Promise<void> {
         const url = `${this.serverUrl}/sitecore/api/ssc/auth/login`;
+        const loginData = {
+            username: this.username,
+            password: this.password,
+            domain: this.domain
+        };
+
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Attempting login...', JSON.stringify({
+                url,
+                username: this.username,
+                domain: this.domain
+            }, null, '\t'));
+        }
 
         try {
-
             const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: this.username,
-                    password: this.password,
-                    domain: this.domain
-                })
+                body: JSON.stringify(loginData)
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Login response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText,
+                    headers: Object.fromEntries(response.headers.entries())
+                }, null, '\t'));
+            }
 
             if (!response.ok) {
                 throw new Error('Login failed');
@@ -58,6 +89,9 @@ class RestfulItemServiceClient {
                 const match = cookies.match(/\.AspNet\.Cookies=([^;]+);/);
                 if (match) {
                     this.authCookie = match[1];
+                    if (this.logLevel === LogLevel.DEBUG) {
+                        console.log('Item Service Client: Authentication cookie retrieved successfully');
+                    }
                 }
             }
             else {
@@ -68,6 +102,9 @@ class RestfulItemServiceClient {
                 throw new Error('Failed to retrieve authentication cookie');
             }
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Login failed', error);
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to log in: ${error.message}`);
             } else {
@@ -103,17 +140,47 @@ class RestfulItemServiceClient {
 
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Getting item by ID...', JSON.stringify({
+                id,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Get item by ID response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json() as unknown as Object;
+            const result = await response.json() as unknown as Object;
+            
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item retrieved successfully', JSON.stringify({
+                    itemId: id,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to get item by ID', JSON.stringify({
+                    id,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to retrieve item by ID: ${error.message}`);
             } else {
@@ -149,17 +216,47 @@ class RestfulItemServiceClient {
 
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/children?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Getting item children...', JSON.stringify({
+                id,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Get item children response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json() as unknown as Object;
+            const result = await response.json() as unknown as Object;
+            
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item children retrieved successfully', JSON.stringify({
+                    parentId: id,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to get item children', JSON.stringify({
+                    id,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to retrieve item children: ${error.message}`);
             } else {
@@ -197,17 +294,48 @@ class RestfulItemServiceClient {
 
         const url = `${this.serverUrl}/sitecore/api/ssc/item?path=${encodedPath}&${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Getting item by path...', JSON.stringify({
+                path,
+                encodedPath,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Get item by path response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json() as unknown as Object;
+            const result = await response.json() as unknown as Object;
+            
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item retrieved by path successfully', JSON.stringify({
+                    path,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to get item by path', JSON.stringify({
+                    path,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to retrieve item by path: ${error.message}`);
             } else {
@@ -240,6 +368,16 @@ class RestfulItemServiceClient {
         const params = new URLSearchParams(options as Record<string, string>);
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${encodedPath}?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Creating item...', JSON.stringify({
+                parentPath,
+                encodedPath,
+                data,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -250,16 +388,41 @@ class RestfulItemServiceClient {
                 body: JSON.stringify(data)
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Create item response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return {
+            const result = {
                 "Status": "Success",
                 "Code": response.status,
                 "Message": "Item created successfully",
             };
+
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item created successfully', JSON.stringify({
+                    parentPath,
+                    itemName: data.ItemName,
+                    templateId: data.TemplateID,
+                    result
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to create item', JSON.stringify({
+                    parentPath,
+                    data,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to create item: ${error.message}`);
             } else {
@@ -289,6 +452,15 @@ class RestfulItemServiceClient {
         const params = new URLSearchParams(options as Record<string, string>);
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Editing item...', JSON.stringify({
+                id,
+                data,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 method: 'PATCH',
@@ -299,16 +471,39 @@ class RestfulItemServiceClient {
                 body: JSON.stringify(data)
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Edit item response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return {
+            const result = {
                 "Status": "Success",
                 "Code": response.status,
                 "Message": "Item updated successfully",
+            };
+
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item edited successfully', JSON.stringify({
+                    id,
+                    result
+                }, null, '\t'));
             }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to edit item', JSON.stringify({
+                    id,
+                    data,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to edit item: ${error.message}`);
             } else {
@@ -335,6 +530,14 @@ class RestfulItemServiceClient {
         const params = new URLSearchParams(options as Record<string, string>);
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Deleting item...', JSON.stringify({
+                id,
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 method: 'DELETE',
@@ -343,16 +546,38 @@ class RestfulItemServiceClient {
                 }
             });
 
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Delete item response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return {
+            const result = {
                 "Status": "Success",
                 "Code": response.status,
                 "Message": "Item deleted successfully",
             };
+
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Item deleted successfully', JSON.stringify({
+                    id,
+                    result
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to delete item', JSON.stringify({
+                    id,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to delete item: ${error.message}`);
             } else {
@@ -390,15 +615,46 @@ class RestfulItemServiceClient {
 
         const url = `${this.serverUrl}/sitecore/api/ssc/item/search?${params.toString()}`;
 
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Searching items...', JSON.stringify({
+                options,
+                url
+            }, null, '\t'));
+        }
+
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
+
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Search items response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return await response.json() as unknown as Object;
+
+            const result = await response.json() as unknown as Object;
+
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Search completed successfully', JSON.stringify({
+                    searchTerm: options.term,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to search items', JSON.stringify({
+                    options,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to search items: ${error.message}`);
             } else {
@@ -434,15 +690,42 @@ class RestfulItemServiceClient {
         if (options.fields) params.set('fields', options.fields.join(','));
         if (options.includeStandardTemplateFields !== undefined) params.set('includeStandardTemplateFields', String(options.includeStandardTemplateFields));
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/query?${params.toString()}`;
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Running stored query...', JSON.stringify({
+                id,
+                options,
+                url
+            }, null, '\t'));
+        }
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Stored query response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return await response.json() as unknown as Object;
+            const result = await response.json() as unknown as Object;
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Stored query completed successfully', JSON.stringify({
+                    queryId: id,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to run stored query', JSON.stringify({
+                    id,
+                    options,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to run stored query: ${error.message}`);
             } else {
@@ -481,15 +764,45 @@ class RestfulItemServiceClient {
         if (options.facet) params.set('facet', options.facet);
         if (options.sorting) params.set('sorting', options.sorting);
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/search?${params.toString()}`;
+        if (this.logLevel === LogLevel.DEBUG) {
+            console.log('Item Service Client: Running stored search...', JSON.stringify({
+                id,
+                term,
+                options,
+                url
+            }, null, '\t'));
+        }
         try {
             const response = await fetch(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Stored search response received', JSON.stringify({
+                    status: response.status,
+                    statusText: response.statusText
+                }, null, '\t'));
+            }
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            return await response.json() as unknown as Object;
+            const result = await response.json() as unknown as Object;
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.log('Item Service Client: Stored search completed successfully', JSON.stringify({
+                    searchId: id,
+                    term,
+                    resultKeys: Object.keys(result)
+                }, null, '\t'));
+            }
+            return result;
         } catch (error) {
+            if (this.logLevel === LogLevel.DEBUG) {
+                console.error('Item Service Client: Failed to run stored search', JSON.stringify({
+                    id,
+                    term,
+                    options,
+                    error
+                }, null, '\t'));
+            }
             if (error instanceof Error) {
                 throw new Error(`Failed to run stored search: ${error.message}`);
             } else {

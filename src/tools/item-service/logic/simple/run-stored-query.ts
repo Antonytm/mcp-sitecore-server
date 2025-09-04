@@ -25,7 +25,8 @@ export async function runStoredQuery(
     conf.itemService.serverUrl,
     conf.itemService.username,
     conf.itemService.password,
-    conf.itemService.domain
+    conf.itemService.domain,
+    conf.logLevel
   );
   const response = await client.runStoredQuery(id, options);
   return {

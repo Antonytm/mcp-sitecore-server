@@ -1,5 +1,6 @@
 import { type CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import RestfulItemServiceClient from "../../client.js";
+import { LogLevel } from "@/logLevel.js";
 
 /**
  * Edit a Sitecore item by ID using the RESTful ItemService API.
@@ -18,9 +19,12 @@ export async function editItem(
         conf.itemService.serverUrl,
         conf.itemService.username,
         conf.itemService.password,
-        conf.itemService.domain
+        conf.itemService.domain,
+        conf.logLevel
     );
+
     const response = await client.editItem(id, data, options);
+
     return {
         content: [
             {

@@ -16,6 +16,7 @@ export async function getItemByPath(conf: Config,
         conf.itemService.username,
         conf.itemService.password,
         conf.itemService.domain,
+        conf.logLevel
     );
 
     const response = await client.getItemByPath(path, options);

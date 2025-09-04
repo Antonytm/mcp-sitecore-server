@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import fs from "node:fs";
 import 'dotenv/config.js';
+import { LogLevel } from "./logLevel";
 
 const ConfigSchema = z.object({
     name: z.string().default("mcp-sitecore-server"),
@@ -40,7 +41,8 @@ const ConfigSchema = z.object({
         password: "b",
         serverUrl: "https://xmcloudcm.localhost/",
     }),
-    authorizationHeader: z.string().default("")
+    authorizationHeader: z.string().default(""),
+    logLevel: z.string().default(LogLevel.INFO),
 });
 
 export const envSchema = z.object({
@@ -57,6 +59,7 @@ export const envSchema = z.object({
     POWERSHELL_PASSWORD: z.string().optional(),
     POWERSHELL_SERVER_URL: z.string().url().optional(),
     AUTORIZATION_HEADER: z.string().optional(),
+    LOG_LEVEL: z.string().optional(),
 });
 
 export const envStartSchema = z.object({
@@ -105,6 +108,7 @@ const config: Config = {
         serverUrl: ENV.POWERSHELL_SERVER_URL || "https://xmcloudcm.localhost/",
     },
     authorizationHeader: ENV.AUTORIZATION_HEADER || "",
+    logLevel: ENV.LOG_LEVEL || LogLevel.INFO,
 };
 
 export { config };

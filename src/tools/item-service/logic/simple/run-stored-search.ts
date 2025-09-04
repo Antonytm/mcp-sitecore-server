@@ -28,7 +28,8 @@ export async function runStoredSearch(
     conf.itemService.serverUrl,
     conf.itemService.username,
     conf.itemService.password,
-    conf.itemService.domain
+    conf.itemService.domain,
+    conf.logLevel
   );
   const response = await client.runStoredSearch(id, term, options);
   return {

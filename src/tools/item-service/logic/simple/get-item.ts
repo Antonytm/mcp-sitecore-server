@@ -17,6 +17,7 @@ export async function getItemById(conf: Config,
         conf.itemService.username,
         conf.itemService.password,
         conf.itemService.domain,
+        conf.logLevel
     );
 
     const response = await client.getItemById(id, options);

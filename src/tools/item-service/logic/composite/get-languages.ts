@@ -7,6 +7,7 @@ export async function getLanguages(conf: Config): Promise<CallToolResult> {
         conf.itemService.username,
         conf.itemService.password,
         conf.itemService.domain,
+        conf.logLevel
     );
 
     const languagesItemResponse = await client.getItemByPath("/sitecore/system/Languages") as unknown as { ItemID: string; };

@@ -16,6 +16,7 @@ export async function getItemDescendants(conf: Config,
         conf.itemService.username,
         conf.itemService.password,
         conf.itemService.domain,
+        conf.logLevel
     );
 
     const responseArray = [];
