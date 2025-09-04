@@ -1,6 +1,6 @@
 {
   "name": "@antonytm/mcp-sitecore-server",
-  "version": "1.2.3-verbose-logging",
+  "version": "1.2.4-verbose-logging",
   "description": "A Model Context Protocol server for Sitecore",
   "files": [
     "dist",
@@ -24,13 +24,13 @@
     "start:stdio": "npm run build && cross-env TRANSPORT=stdio node dist/index.js",
     "run": "npm run build && node dist/run.js",
     "test": "npm run build && npm run bundle && vitest run",
-    "docker:windows:build": "docker build -t antonytm/mcp-sitecore-windows:1.2.3-verbose-logging -t antonytm/mcp-sitecore-windows:latest --file .\\docker\\windows\\Dockerfile .",
+    "docker:windows:build": "docker build -t antonytm/mcp-sitecore-windows:1.2.4-verbose-logging -t antonytm/mcp-sitecore-windows:latest --file .\\docker\\windows\\Dockerfile .",
     "docker:windows:run": "docker run -it --rm -p 4001:3001 antonytm/mcp-sitecore-windows:latest",
-    "docker:windows:push": "docker push antonytm/mcp-sitecore-windows:1.2.3-verbose-logging && docker push antonytm/mcp-sitecore-windows:latest",
+    "docker:windows:push": "docker push antonytm/mcp-sitecore-windows:1.2.4-verbose-logging && docker push antonytm/mcp-sitecore-windows:latest",
     "docker:windows": "npm run docker:windows:build && npm run docker:windows:push",
-    "docker:linux:build": "docker build -t antonytm/mcp-sitecore-linux:1.2.3-verbose-logging -t antonytm/mcp-sitecore-linux:latest --file ./docker/linux/Dockerfile .",
+    "docker:linux:build": "docker build -t antonytm/mcp-sitecore-linux:1.2.4-verbose-logging -t antonytm/mcp-sitecore-linux:latest --file ./docker/linux/Dockerfile .",
     "docker:linux:run": "docker run -it --rm -p 4001:3001 antonytm/mcp-sitecore-linux:latest",
-    "docker:linux:push": "docker push antonytm/mcp-sitecore-linux:1.2.3-verbose-logging && docker push antonytm/mcp-sitecore-linux:latest",
+    "docker:linux:push": "docker push antonytm/mcp-sitecore-linux:1.2.4-verbose-logging && docker push antonytm/mcp-sitecore-linux:latest",
     "docker:linux": "npm run docker:linux:build && npm run docker:linux:push"
   },
   "dependencies": {

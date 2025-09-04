@@ -23,7 +23,21 @@ export async function editItem(
         conf.logLevel
     );
 
+    if(conf.logLevel === LogLevel.DEBUG) {
+        console.log('Item Service Client: Editing item...', JSON.stringify({
+            id,
+            data,
+            options
+        }, null, '\t'));
+    }
     const response = await client.editItem(id, data, options);
+    
+    if(conf.logLevel === LogLevel.DEBUG) {
+        console.log('Item Service Client: Item edited successfully', JSON.stringify({
+            id,
+            response
+        }, null, '\t'));
+    }
 
     return {
         content: [

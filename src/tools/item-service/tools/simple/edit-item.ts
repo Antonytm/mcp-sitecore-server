@@ -19,7 +19,10 @@ export function editItemTool(server: McpServer, config: Config) {
             }).optional(),
         },
         async (params) => {
-            return safeMcpResponse(editItem(config, params.id, params.data, params.options || {}));
+            console.log('Edit Item Tool: Executing tool...', JSON.stringify(params, null, '\t'));
+            const result = await safeMcpResponse(editItem(config, params.id, params.data, params.options || {}));
+            console.log('Edit Item Tool: Result', JSON.stringify(result, null, '\t'));
+            return result;
         }
     );
 }

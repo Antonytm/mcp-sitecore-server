@@ -16,7 +16,7 @@ const transportOptions: TransportOptions = {
 
 const client = new Client({
     name: "mcp-sitecore-server",
-    version: "1.2.3-verbose-logging",
+    version: "1.2.4-verbose-logging",
 });
 
 const transport = createTransport(transportOptions);
