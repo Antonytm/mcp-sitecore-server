@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import fs from "node:fs";
 import 'dotenv/config.js';
-import { LogLevel } from "./logLevel";
+import { LogLevel } from "./logLevel.js";
 
 const ConfigSchema = z.object({
     name: z.string().default("mcp-sitecore-server"),
