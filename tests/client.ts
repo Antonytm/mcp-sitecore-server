@@ -16,7 +16,7 @@ const transportOptions: TransportOptions = {
 
 const client = new Client({
     name: "mcp-sitecore-server",
-    version: "1.3.0",
+    version: "1.3.1",
 });
 
 const transport = createTransport(transportOptions);

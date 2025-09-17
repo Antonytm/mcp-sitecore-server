@@ -7,13 +7,13 @@
     "url": "https://github.com/Antonytm/mcp-sitecore-server",
     "source": "github"
   },
-  "version": "1.3.0",
+  "version": "1.3.1",
   "packages": [
     {
       "registry_type": "npm",
       "registry_base_url": "https://registry.npmjs.org",
       "identifier": "@antonytm/mcp-sitecore-server",
-      "version": "1.3.0",
+      "version": "1.3.1",
       "transport": {
         "type": "stdio"
       },
