@@ -2,6 +2,8 @@ name: Publish @antonytm/mcp-sitecore-server to NPM registry
 on:
   release:
     types: [created]
+permissions:
+  id-token: write
 jobs:
   build:
     runs-on: ubuntu-latest
