@@ -31,7 +31,7 @@
           "POWERSHELL_DOMAIN": "sitecore",
           "POWERSHELL_USERNAME": "admin",
           "POWERSHELL_PASSWORD": "b",
-          "POWERSHELL_SERVER_URL": "https://xmcloudcm.localhost/",
+          "POWERSHELL_SERVER_URL": "https://xmcloudcm.localhost/"
         }
       ]
     }
