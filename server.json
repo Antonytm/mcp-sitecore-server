@@ -1,0 +1,39 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.Antonytm/mcp-sitecore-server",
+  "description": "A Model Context Protocol server for Sitecore",
+  "status": "active",
+  "repository": {
+    "url": "https://github.com/Antonytm/mcp-sitecore-server",
+    "source": "github"
+  },
+  "version": "1.3.0",
+  "packages": [
+    {
+      "registry_type": "npm",
+      "registry_base_url": "https://registry.npmjs.org",
+      "identifier": "@antonytm/mcp-sitecore-server",
+      "version": "1.3.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environment_variables": [
+        {
+          "TRANSPORT": "stdio",
+          "GRAPHQL_ENDPOINT": "https://xmcloudcm.localhost/sitecore/api/graph/",
+          "GRAPHQL_SCHEMAS": "edge,master,core",
+          "GRAPHQL_API_KEY": "{6D3F291E-66A5-4703-887A-D549AF83D859}",
+          "GRAPHQL_HEADERS": "",
+          "ITEM_SERVICE_DOMAIN": "sitecore",
+          "ITEM_SERVICE_USERNAME": "admin",
+          "ITEM_SERVICE_PASSWORD": "b",
+          "ITEM_SERVICE_SERVER_URL": "https://xmcloudcm.localhost/",
+          "POWERSHELL_DOMAIN": "sitecore",
+          "POWERSHELL_USERNAME": "admin",
+          "POWERSHELL_PASSWORD": "b",
+          "POWERSHELL_SERVER_URL": "https://xmcloudcm.localhost/",
+        }
+      ]
+    }
+  ]
+}
