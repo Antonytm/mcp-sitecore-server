@@ -14,7 +14,7 @@ export function addPlaceholderSettingByIdPowershellTool(server: McpServer, confi
             itemId: z.string().describe("The ID of the item to add the placeholder setting to."),
             placeholderSettingId: z.string().describe("The ID of the placeholder setting to add."),
             key: z.string().describe("The key of the placeholder setting to add."),
-            database: z.string().describe("The context database.").default("master").optional(),
+            database: z.string().describe("The context database.").optional().default("master"),
             finalLayout: z
                 .boolean()
                 .describe("Specifies layout to add the rendering placeholder setting to. If 'true', the final layout is used, otherwise - shared layout.")

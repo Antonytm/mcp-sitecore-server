@@ -38,18 +38,19 @@ export function getLogsPowerShellTool(server: McpServer, config: Config) {
         `Retrieves Sitecore logs from the log directory.`,
         {
             name: z.string()
-                .default("log")
                 .optional()
+                .default("log")
                 .describe(`The name of the log file to retrieve. If not provided, defaults to log.*. Possible options: ${logFilePrefixes.join(", ")}.`),
             level: z.enum(Object.values(LogLevel) as [string, ...[string]])
+                .optional()
                 .default(LogLevel.DEBUG)
-                .optional(),
+                .describe("The level of the log to retrieve. Defaults to DEBUG."),
             date: z.string()
                 .optional()
                 .describe(`The date of the log file to retrieve. If not provided, defaults to today. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z'`),
             tail: z.number()
-                .default(500)
                 .optional()
+                .default(500)
                 .describe("The number of lines to retrieve from the end of the log file. Defaults to 500."),
         },
         async (params) => {

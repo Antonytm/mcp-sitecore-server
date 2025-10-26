@@ -13,7 +13,7 @@ export function setRenderingByIdPowershellTool(server: McpServer, config: Config
         {
             itemId: z.string().describe("The ID of the item holding the rendering."),
             uniqueId: z.string().describe("The unique ID of the rendering."),
-            database: z.string().describe("The context database.").default("master").optional(),
+            database: z.string().describe("The context database.").optional().default("master"),
             placeholder: z.string().describe("New rendering placeholder value if specified.").optional(),
             dataSource: z.string().describe("New rendering data source if specified.").optional(),
             finalLayout: z

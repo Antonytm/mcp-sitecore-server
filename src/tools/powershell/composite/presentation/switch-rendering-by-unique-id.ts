@@ -14,7 +14,7 @@ export function switchRenderingByUniqueIdPowershellTool(server: McpServer, confi
             itemId: z.string().describe("The ID of the item holding the rendering."),
             uniqueId: z.string().describe("The unique ID of the rendering to switch."),       
             newRenderingId: z.string().describe("The ID of the new rendering."),
-            database: z.string().describe("The context database.").default("master").optional(),
+            database: z.string().describe("The context database.").optional().default("master"),
             finalLayout: z
                 .boolean()
                 .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")

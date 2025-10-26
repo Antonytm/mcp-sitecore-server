@@ -13,7 +13,7 @@ export function addRenderingByIdPowershellTool(server: McpServer, config: Config
         {
             itemId: z.string().describe("The ID of the item to add the rendering to."),
             renderingId: z.string().describe("The ID of the rendering to add."),
-            database: z.string().describe("The context database.").default("master").optional(),
+            database: z.string().describe("The context database.").optional().default("master"),
             placeHolder: z.string().describe("The placeholder to add the rendering to.").optional(),
             dataSource: z.string().describe("The rendering data source.").optional(),
             finalLayout: z
