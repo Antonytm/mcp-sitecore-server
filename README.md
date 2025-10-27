@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/antonytm-mcp-sitecore-server-badge.png)](https://mseep.ai/app/antonytm-mcp-sitecore-server)
+
 # Model Context Protocol server for Sitecore
 
 [![Build](https://github.com/antonytm/mcp-sitecore-server/actions/workflows/publish-npm.yml/badge.svg)](https://github.com/Antonytm/mcp-sitecore-server/actions/workflows/publish-npm.yml)
