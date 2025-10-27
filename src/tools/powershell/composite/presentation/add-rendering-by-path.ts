@@ -13,7 +13,7 @@ export function addRenderingByPathPowershellTool(server: McpServer, config: Conf
         {
             itemPath: z.string().describe("The path of the item to add the rendering to."),
             renderingPath: z.string().describe("The path of the rendering to add."),
-            placeHolder: z.string().describe("The placeholder to add the rendering to.").optional(),
+            placeHolder: z.string().describe("The placeholder to add the rendering to."),
             dataSource: z.string().describe("The rendering data source.").optional(),
             finalLayout: z
                 .boolean()
