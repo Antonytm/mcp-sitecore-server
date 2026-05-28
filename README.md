@@ -4,6 +4,16 @@
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 [![smithery badge](https://smithery.ai/badge/@Antonytm/mcp-sitecore-server)](https://smithery.ai/server/@Antonytm/mcp-sitecore-server)
 
+## Summary
+
+An open-source Model Context Protocol server that gives AI agents (Claude, ChatGPT, Cursor, and others) direct read/write access to Sitecore. It bridges the gap between modern AI-driven workflows and Sitecore CMS, eliminating manual copy-paste between tools.
+
+- **100+ tools** across search, query, create, read, update, delete, PowerShell, logging, security, and presentation
+- Covers multiple Sitecore API surfaces: **Item Service**, **GraphQL Edge**, and **Sitecore PowerShell Extensions**
+- Works with **Sitecore AI (XM Cloud)** and **Sitecore XM/XP** (all versions), and with any MCP-compatible client via JSON-RPC
+- Reported impact: **5× faster** Figma-to-Sitecore workflows and **~70% less** manual scaffolding (see [case study](https://exdst.com/case-studies/sitecore-mcp))
+- Three ways to run it: **NPM**, **Docker**, or from source
+
 ## Implemented tools
 
 - [x] GraphQL API
