@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
-export function updateItemReferrerByIdPowerShellTool(server: McpServer, config: Config) {
+export function updateItemReferrerByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-update-item-referrer-by-id",
         "Updates all references to the specified item (by its ID) to point to a new provided in the -NewTarget or removes links to the item.",
@@ -44,7 +44,7 @@ export function updateItemReferrerByIdPowerShellTool(server: McpServer, config: 
             }
 
             const command = `
-                $newTargetItem = Get-Item -Path ${params.newTarget};
+                $newTargetItem = Get-Item -Path ${quotePowerShellString(params.newTarget)};
                 Update-ItemReferrer ${commandBuilder.buildParametersString(addParameters)} -NewTarget $newTargetItem;
             `;
 

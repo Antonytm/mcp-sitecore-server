@@ -1,12 +1,12 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
-export function addRenderingByIdPowershellTool(server: McpServer, config: Config) {
+export function addRenderingByIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-add-rendering-by-id",
         "Adds a rendering to presentation of an item specified by item ID.",
@@ -36,7 +36,7 @@ export function addRenderingByIdPowershellTool(server: McpServer, config: Config
             addRenderingParameters["Index"] = getNumberParameterValue(params.index);
             
             const command = `
-                $rendering = New-Rendering -Id ${params.renderingId} -Database ${params.database};
+                $rendering = New-Rendering -Id ${quotePowerShellString(params.renderingId)} -Database ${quotePowerShellString(params.database)};
                 Add-Rendering -Instance $rendering ${commandBuilder.buildParametersString(addRenderingParameters)};
             `;
             

@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function removeRenderingByPathPowershellTool(server: McpServer, config: Config) {
+export function removeRenderingByPathPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-remove-rendering-by-path",
         "Removes renderings from an item by owners item path.",

@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function unlockUserPowerShellTool(server: McpServer, config: Config) {
+export function unlockUserPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-unlock-user",
         "Unlocks a Sitecore user account that has been locked out due to failed login attempts.",

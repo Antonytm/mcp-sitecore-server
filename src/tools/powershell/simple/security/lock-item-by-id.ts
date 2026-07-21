@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function lockItemByIdPowerShellTool(server: McpServer, config: Config) {
+export function lockItemByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-lock-item-by-id",
         "Lock a Sitecore item by its ID.",

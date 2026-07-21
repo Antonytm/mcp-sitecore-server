@@ -1,8 +1,9 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { PowershellClient } from "@/tools/powershell/client.js";
+import { quotePowerShellString } from "@/tools/powershell/command-builder.js";
 
 // The results of usage of this tool are not quite good.
 // Problems:
@@ -66,7 +67,7 @@ const languages = ["En"];
 
 const iso8601DateRegex = /^([\+-]?\d{4}(?!\d{2}\b))((-?)((0[1-9]|1[0-2])(\3([12]\d|0[1-9]|3[01]))?|W([0-4]\d|5[0-2])(-?[1-7])?|(00[1-9]|0[1-9]\d|[12]\d{2}|3([0-5]\d|6[1-6])))([T\s]((([01]\d|2[0-3])((:?)[0-5]\d)?|24\:?00)([\.,]\d+(?!:))?)?(\17[0-5]\d([\.,]\d+)?)?([zZ]|([\+-])([01]\d|2[0-3]):?([0-5]\d)?)?)?)?$/;
 
-export async function findItemPowerShellTool(server: McpServer, config: Config) {
+export async function findItemPowerShellTool(server: ToolServer, config: Config) {
     const client = new PowershellClient(
         config.powershell.serverUrl,
         config.powershell.username,
@@ -111,7 +112,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
         },
         async (params) => {
 
-            const criteria = params?.criteria?.map(c => {
+            const criteria = params?.criteria?.map((c: any) => {
                 // Depending on the field type and filter type, the criteria format may vary.
                 // Implemented only for DateTime fields and some common filters.
                 // Other fields should be implmented as needed.
@@ -126,7 +127,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                         else {
                             throw new Error(`Invalid date range format for field ${c.field}. Expected format is 'start_date | end_date'.`);
                         }
-                        const [startDate, endDate] = c.value.split(divider).map(date => date.trim());
+                        const [startDate, endDate] = c.value.split(divider).map((date: string) => date.trim());
                         if (!startDate || !endDate) {
                             throw new Error(`Invalid date range format for field ${c.field}. Expected format is 'start_date | end_date'.`);
                         }
@@ -141,7 +142,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                     return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = [datetime]"${c.value}"; }`;
                 }
 
-                return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = "${c.value}"; }`;
+                return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = ${quotePowerShellString(c.value)}; }`;
             }).join(", ");
 
             let extraFields = "";
@@ -149,7 +150,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                 extraFields += `, @{n="${c.field}"; e={$_.Fields["${c.field}"]}}`;
             });
 
-            const command = `Find-Item -Index "${params.index}" -Criteria @(${criteria}) -First ${params.first} -Skip ${params.skip} | Select-Object  @{n="Name"; e={$_.Name}}, @{n="Path"; e={$_.Path}},@{n="ItemId"; e={$_.ItemId.ToString()}}, @{n="TemplateId"; e={$_.TemplateId.ToString()}}, @{n="TemplateName"; e={$_.TemplateName}} ${extraFields}`;
+            const command = `Find-Item -Index ${quotePowerShellString(params.index)} -Criteria @(${criteria}) -First ${params.first} -Skip ${params.skip} | Select-Object  @{n="Name"; e={$_.Name}}, @{n="Path"; e={$_.Path}},@{n="ItemId"; e={$_.ItemId.ToString()}}, @{n="TemplateId"; e={$_.TemplateId.ToString()}}, @{n="TemplateName"; e={$_.TemplateName}} ${extraFields}`;
 
             return safeMcpResponse(client.executeScriptJson(command, {}).then(
                 (result: any) => {

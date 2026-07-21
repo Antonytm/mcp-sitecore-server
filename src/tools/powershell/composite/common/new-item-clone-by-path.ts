@@ -1,12 +1,12 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 
-export function newItemCloneByPathPowerShellTool(server: McpServer, config: Config) {
+export function newItemCloneByPathPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-new-item-clone-by-path",
         "Creates a new item clone based on the item provided by its path.",
@@ -38,7 +38,7 @@ export function newItemCloneByPathPowerShellTool(server: McpServer, config: Conf
             }
 
             const command = `
-                $destinationItem = Get-Item -Path ${params.destination};
+                $destinationItem = Get-Item -Path ${quotePowerShellString(params.destination)};
                 New-ItemClone ${commandBuilder.buildParametersString(addParameters)} -destination $destinationItem;
             `;
 

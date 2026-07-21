@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import { safeMcpResponse } from "@/helper.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { runGenericPowershellCommand } from "./simple/generic.js";
 
-export function runPowershellScriptTool(server: McpServer, config: Config) {
+export function runPowershellScriptTool(server: ToolServer, config: Config) {
     server.tool(
         "run-powershell-script",
         "Runs a PowerShell script and returns the output.",

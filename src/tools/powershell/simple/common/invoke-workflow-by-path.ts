@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function invokeWorkflowByPathPowerShellTool(server: McpServer, config: Config) {
+export function invokeWorkflowByPathPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-invoke-workflow-by-path",
         "Executes workflow action for a Sitecore item by its path.",

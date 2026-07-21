@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getSearchIndexPowerShellTool(server: McpServer, config: Config) {
+export function getSearchIndexPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "indexing-get-search-index",
         "Get information about Sitecore search indexes. Can filter by name, database, running status, or corrupted status.",

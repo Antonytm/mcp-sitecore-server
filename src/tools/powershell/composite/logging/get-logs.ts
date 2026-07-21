@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -32,12 +32,16 @@ function formatDate(date?: string): string {
     return [year, month, day].join("");
 }
 
-export function getLogsPowerShellTool(server: McpServer, config: Config) {
+export function getLogsPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         `logging-get-logs`,
         `Retrieves Sitecore logs from the log directory.`,
         {
             name: z.string()
+                // Restrict to a safe filename charset: this value is interpolated into a
+                // PowerShell path glob (alongside the $SitecoreDataFolder variable), so it
+                // cannot be single-quoted. Disallowing shell metacharacters prevents injection.
+                .regex(/^[A-Za-z0-9._*-]*$/, "name may only contain letters, digits, '.', '_', '-' and '*'")
                 .optional()
                 .default("log")
                 .describe(`The name of the log file to retrieve. If not provided, defaults to log.*. Possible options: ${logFilePrefixes.join(", ")}.`),
@@ -60,7 +64,7 @@ export function getLogsPowerShellTool(server: McpServer, config: Config) {
             return safeMcpResponse((async () => {
                 const json = await runGenericPowershellCommand(config, command, {});
 
-                const filteredLogs = filterByLogLevel(JSON.parse(json.content[0].text as string) as any, LogLevel[params.level as keyof typeof LogLevel] || LogLevel.DEBUG);
+                const filteredLogs = filterByLogLevel(JSON.parse((json.content[0] as any).text as string) as any, LogLevel[params.level as keyof typeof LogLevel] || LogLevel.DEBUG);
 
                 return {
                     content: [

@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getItemTemplateByIdPowerShellTool(server: McpServer, config: Config) {
+export function getItemTemplateByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-get-item-template-by-id",
         "Gets template information for a Sitecore item by its ID.",

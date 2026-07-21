@@ -15,7 +15,7 @@
     "verbatimModuleSyntax": true,
     "incremental": false,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]

@@ -1,11 +1,11 @@
 // filepath: c:\source\mcp-sitecore-server\src\tools\powershell\simple\security\register-new-domain.ts
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function newDomainPowerShellTool(server: McpServer, config: Config) {
+export function newDomainPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-new-domain",
         "Creates a new Sitecore domain.",

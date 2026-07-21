@@ -1,3 +1,5 @@
+import { fetchWithTimeout } from "@/utils.js";
+
 class RestfulItemServiceClient {
     private serverUrl: string;
     private username: string;
@@ -38,7 +40,7 @@ class RestfulItemServiceClient {
 
         try {
 
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -104,7 +106,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
@@ -150,7 +152,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/children?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
@@ -198,7 +200,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item?path=${encodedPath}&${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
 
@@ -241,7 +243,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${encodedPath}?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -290,7 +292,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -336,7 +338,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 method: 'DELETE',
                 headers: {
                     'Cookie': `.AspNet.Cookies=${this.authCookie}`
@@ -391,7 +393,7 @@ class RestfulItemServiceClient {
         const url = `${this.serverUrl}/sitecore/api/ssc/item/search?${params.toString()}`;
 
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
             if (!response.ok) {
@@ -435,7 +437,7 @@ class RestfulItemServiceClient {
         if (options.includeStandardTemplateFields !== undefined) params.set('includeStandardTemplateFields', String(options.includeStandardTemplateFields));
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/query?${params.toString()}`;
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
             if (!response.ok) {
@@ -482,7 +484,7 @@ class RestfulItemServiceClient {
         if (options.sorting) params.set('sorting', options.sorting);
         const url = `${this.serverUrl}/sitecore/api/ssc/item/${id}/search?${params.toString()}`;
         try {
-            const response = await fetch(url, {
+            const response = await fetchWithTimeout(url, {
                 headers: { 'Cookie': `.AspNet.Cookies=${this.authCookie}` }
             });
             if (!response.ok) {

@@ -1,3 +1,5 @@
+import { quotePowerShellString } from "./command-builder.js";
+
 export function prepareArgsString(parameters: Record<string, any>): string {
     let scriptWithParameters = "";
     if (parameters) {
@@ -6,9 +8,12 @@ export function prepareArgsString(parameters: Record<string, any>): string {
                 scriptWithParameters += ` -${parameter}`;
             }
             else if (Array.isArray(parameters[parameter])) {
-                scriptWithParameters += ` -${parameter} "${parameters[parameter].join('","')}"`;
+                const items = parameters[parameter]
+                    .map((item: unknown) => quotePowerShellString(item))
+                    .join(",");
+                scriptWithParameters += ` -${parameter} ${items}`;
             } else {
-                scriptWithParameters += ` -${parameter} "${parameters[parameter]}"`;
+                scriptWithParameters += ` -${parameter} ${quotePowerShellString(parameters[parameter])}`;
             }
         }
     }

@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
-export function getArchiveItemPowerShellTool(server: McpServer, config: Config) {
+export function getArchiveItemPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-get-archive-item",
         "Gets a list of items found in the specified archive.",
@@ -32,8 +32,8 @@ export function getArchiveItemPowerShellTool(server: McpServer, config: Config) 
             }
 
             const command = `
-                $database = Get-Database -Name ${params.database};
-                $archive = Get-Archive -Database $database -Name ${params.archive};
+                $database = Get-Database -Name ${quotePowerShellString(params.database)};
+                $archive = Get-Archive -Database $database -Name ${quotePowerShellString(params.archive)};
                 Get-ArchiveItem ${commandBuilder.buildParametersString(parameters)} -Archive $archive;
             `;
 

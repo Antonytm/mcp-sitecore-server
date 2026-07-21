@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function resetItemFieldByIdPowerShellTool(server: McpServer, config: Config) {
+export function resetItemFieldByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-reset-item-field-by-id",
         "Resets item fields, specified as either names, fields or template fields by ID.",

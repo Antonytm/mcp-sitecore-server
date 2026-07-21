@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,7 +6,7 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
-export function setRenderingByIdPowershellTool(server: McpServer, config: Config) {
+export function setRenderingByIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-set-rendering-by-id",
         "Updates rendering specified by item ID with new values.",

@@ -1,12 +1,12 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function switchRenderingByUniqueIdPowershellTool(server: McpServer, config: Config) {
+export function switchRenderingByUniqueIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-switch-rendering-by-unique-id",
         "Switches an existing rendering specified by unique ID with an alternate one for the item specified by item ID.",
@@ -32,7 +32,7 @@ export function switchRenderingByUniqueIdPowershellTool(server: McpServer, confi
             switchRenderingParameters["Language"] = params.language;
 
             const command = `
-                $targetRendering = New-Rendering -Id "${params.newRenderingId}" -Database "${params.database}"
+                $targetRendering = New-Rendering -Id ${quotePowerShellString(params.newRenderingId)} -Database ${quotePowerShellString(params.database)}
                 Switch-Rendering -NewRendering $targetRendering ${commandBuilder.buildParametersString(switchRenderingParameters)}
             `;
 

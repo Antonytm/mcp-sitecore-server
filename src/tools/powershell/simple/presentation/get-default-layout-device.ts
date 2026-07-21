@@ -1,9 +1,9 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getDefaultLayoutDevicePowershellTool(server: McpServer, config: Config) {
+export function getDefaultLayoutDevicePowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-get-default-layout-device",
         "Gets the default layout.",

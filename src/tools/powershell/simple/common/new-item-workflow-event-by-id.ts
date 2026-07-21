@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function newItemWorkflowEventByIdPowerShellTool(server: McpServer, config: Config) {
+export function newItemWorkflowEventByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-new-item-workflow-event-by-id",
         "Creates a new entry in the workflow history for a Sitecore item by its ID.",

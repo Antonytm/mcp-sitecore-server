@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { AccessRights } from "./access-rights.js";
 
-export function testItemAclPowerShellTool(server: McpServer, config: Config) {
+export function testItemAclPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-test-item-acl-by-id",
         "Tests whether a user or role has specific access rights to a Sitecore item by its ID.",

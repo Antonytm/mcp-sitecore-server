@@ -1,12 +1,12 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function switchRenderingByIdPowershellTool(server: McpServer, config: Config) {
+export function switchRenderingByIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-switch-rendering-by-id",
         "Switches an existing rendering specified by item ID with an alternate one for the item specified by item ID.",
@@ -41,7 +41,7 @@ export function switchRenderingByIdPowershellTool(server: McpServer, config: Con
             switchRenderingParameters["FinalLayout"] = getSwitchParameterValue(params.finalLayout);
 
             const command = `
-                $sourceRenderings = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)} | Where-Object { $_.ItemID -ceq "${params.oldRenderingId}" };
+                $sourceRenderings = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)} | Where-Object { $_.ItemID -ceq ${quotePowerShellString(params.oldRenderingId)} };
                 $targetRendering = New-Rendering ${commandBuilder.buildParametersString(newRenderingParameters)}
                 foreach($sourceRendering in $sourceRenderings) {
                     Switch-Rendering -Instance $sourceRendering -NewRendering $targetRendering ${commandBuilder.buildParametersString(switchRenderingParameters)}

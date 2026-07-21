@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function publishItemByIdPowerShellTool(server: McpServer, config: Config) {
+export function publishItemByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-publish-item-by-id",
         "Publishes a Sitecore item by its ID.",

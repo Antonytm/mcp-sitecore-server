@@ -1,10 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
+import { quotePowerShellString } from "../../command-builder.js";
 
-export function setLayoutIdPowershellTool(server: McpServer, config: Config) {
+export function setLayoutIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-set-layout-by-id",
         "Sets layout for an item specified by Id.",
@@ -20,9 +21,9 @@ export function setLayoutIdPowershellTool(server: McpServer, config: Config) {
         },
         async (params) => {
             const command = `
-                $layout = Get-Item -Path ${params.layoutPath} -Id ${params.layoutId};
-                $device = Get-LayoutDevice -Default;                
-                Set-Layout -Id ${params.itemId} -Layout $layout -Device $device ${params.language ? `-Language ${params.language}` : ""}
+                $layout = Get-Item -Path ${quotePowerShellString(params.layoutPath)} -Id ${quotePowerShellString(params.layoutId)};
+                $device = Get-LayoutDevice -Default;
+                Set-Layout -Id ${quotePowerShellString(params.itemId)} -Layout $layout -Device $device ${params.language ? `-Language ${quotePowerShellString(params.language)}` : ""}
                     ${params.finalLayout ? "-FinalLayout" : ""};
             `.replaceAll(/[\n]+/g, "");
 

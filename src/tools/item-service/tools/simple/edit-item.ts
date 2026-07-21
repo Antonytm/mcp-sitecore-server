@@ -1,10 +1,10 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { editItem } from "../../logic/simple/edit-item.js";
 import { safeMcpResponse } from "@/helper.js";
 
-export function editItemTool(server: McpServer, config: Config) {
+export function editItemTool(server: ToolServer, config: Config) {
     server.tool(
         'item-service-edit-item',
         "Edit a Sitecore item by its ID.",

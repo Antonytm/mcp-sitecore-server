@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getCachePowerShellTool(server: McpServer, config: Config) {
+export function getCachePowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-get-cache",
         "Gets information about Sitecore caches.",

@@ -1,10 +1,10 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { getItemByPath } from "../../logic/simple/get-item-by-path.js";
 import { safeMcpResponse } from "@/helper.js";
 
-export function getItemByPathTool(server: McpServer, config: Config) {
+export function getItemByPathTool(server: ToolServer, config: Config) {
     server.tool(
         'item-service-get-item-by-path',
         "Get a Sitecore item by its path.",

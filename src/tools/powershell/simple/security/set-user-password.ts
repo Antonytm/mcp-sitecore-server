@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function setUserPasswordPowerShellTool(server: McpServer, config: Config) {
+export function setUserPasswordPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-set-user-password",
         "Sets a new password for a Sitecore user.",

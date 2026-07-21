@@ -1,12 +1,12 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
-export function addRenderingByPathPowershellTool(server: McpServer, config: Config) {
+export function addRenderingByPathPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-add-rendering-by-path",
         "Adds a rendering to presentation of an item specified by path.",
@@ -34,7 +34,7 @@ export function addRenderingByPathPowershellTool(server: McpServer, config: Conf
             addRenderingParameters["Index"] = getNumberParameterValue(params.index);
             
             const command = `
-                $rendering = New-Rendering -Path "${params.renderingPath}";
+                $rendering = New-Rendering -Path ${quotePowerShellString(params.renderingPath)};
                 Add-Rendering -Instance $rendering ${commandBuilder.buildParametersString(addRenderingParameters)};
             `;
             

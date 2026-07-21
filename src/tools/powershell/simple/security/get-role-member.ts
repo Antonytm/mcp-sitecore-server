@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getRoleMemberPowerShellTool(server: McpServer, config: Config) {
+export function getRoleMemberPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-get-role-member",
         "Get members of a Sitecore role.",

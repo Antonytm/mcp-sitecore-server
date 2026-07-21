@@ -1,10 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
+import { quotePowerShellString } from "../../command-builder.js";
 
-export function removeSearchIndexItemByPathPowerShellTool(server: McpServer, config: Config) {
+export function removeSearchIndexItemByPathPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "indexing-remove-search-index-item-by-path",
         "Removes the item with the specified path from the search index. Supports wildcard filtering for the index name.",
@@ -18,8 +19,8 @@ export function removeSearchIndexItemByPathPowerShellTool(server: McpServer, con
         },
         async (params) => {
             const command = `
-                $item = Get-Item -Path ${params.path};
-                $indexName = "${params.indexName}";
+                $item = Get-Item -Path ${quotePowerShellString(params.path)};
+                $indexName = ${quotePowerShellString(params.indexName)};
                 Remove-SearchIndexItem -Item $item -Name $indexName
             `.replaceAll(/[\n]+/g, "");
 

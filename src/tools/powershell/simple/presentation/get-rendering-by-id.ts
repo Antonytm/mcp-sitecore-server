@@ -1,11 +1,11 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function getRenderingByIdPowershellTool(server: McpServer, config: Config) {
+export function getRenderingByIdPowershellTool(server: ToolServer, config: Config) {
     server.tool(
         "presentation-get-rendering-by-id",
         "Gets rendering definition by item id.",

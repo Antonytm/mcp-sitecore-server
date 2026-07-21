@@ -1,12 +1,13 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { prepareArgsString } from "../../utils.js";
 import { AccessRights } from "../../simple/security/access-rights.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
+import { quotePowerShellString } from "../../command-builder.js";
 
-export function setItemAclByIdPowerShellTool(server: McpServer, config: Config) {
+export function setItemAclByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-set-item-acl-by-id",
         "Sets an access control entry to a Sitecore item by its ID.",
@@ -36,7 +37,7 @@ export function setItemAclByIdPowerShellTool(server: McpServer, config: Config) 
             const parameters1 = prepareArgsString(parameters1Obj);
             const command = `
                 $acl = New-ItemAcl ${parameters1};
-                Get-Item -Id ${params.id} -Path ${params.path} | Set-ItemAcl -AccessRules $acl
+                Get-Item -Id ${quotePowerShellString(params.id)} -Path ${quotePowerShellString(params.path)} | Set-ItemAcl -AccessRules $acl
             `.replaceAll(/[\n]+/g, "");
 
             return safeMcpResponse(runGenericPowershellCommand(config, command, {}));

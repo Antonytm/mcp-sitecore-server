@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function addBaseTemplateByIdPowerShellTool(server: McpServer, config: Config) {
+export function addBaseTemplateByIdPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-add-base-template-by-id",
         "Adds a base template to a template item by its ID.",

@@ -19,7 +19,7 @@ startCommand:
           POWERSHELL_USERNAME: config.powershellUsername,
           POWERSHELL_PASSWORD: config.powershellPassword,
           POWERSHELL_SERVER_URL: config.powershellServerUrl,
-          AUTORIZATION_HEADER: config.authorizationHeader
+          AUTHORIZATION_HEADER: config.authorizationHeader
         } })
   configSchema:
     # JSON Schema defining the configuration options for the MCP.

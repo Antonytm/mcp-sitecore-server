@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "../../config.js";
 import { safeMcpResponse } from "../../helper.js";
 import { introspection } from "./generic/introspection.js";
@@ -6,7 +6,7 @@ import { z } from "zod";
 import { query } from "./generic/query.js";
 
 
-function registerIntrospectionTool(server: McpServer, config: Config, schema: string) {
+function registerIntrospectionTool(server: ToolServer, config: Config, schema: string) {
     server.tool(
         `introspection-graphql-${schema}`,
         `Introspection Sitecore GraphQL ${schema} schema, use this tool before doing a query to get the schema information if you do not have it available as a resource already.`,
@@ -17,7 +17,7 @@ function registerIntrospectionTool(server: McpServer, config: Config, schema: st
     )
 }
 
-function registerQueryTool(server: McpServer, config: Config, schema: string) {
+function registerQueryTool(server: ToolServer, config: Config, schema: string) {
     server.tool(
         `query-graphql-${schema}`,
         `Query a Sitecore GraphQL ${schema} endpoint with the given query and variables.`,
@@ -31,7 +31,7 @@ function registerQueryTool(server: McpServer, config: Config, schema: string) {
     )
 }
 
-export function registerGraphQL(server: McpServer, config: Config) {
+export function registerGraphQL(server: ToolServer, config: Config) {
     config.graphQL.schemas.forEach((schema) => {
         registerIntrospectionTool(server, config, schema);
         registerQueryTool(server, config, schema);

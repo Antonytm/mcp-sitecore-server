@@ -1,4 +1,4 @@
-import { generateUUID } from "@/utils.js";
+import { generateUUID, fetchWithTimeout } from "@/utils.js";
 import { convertObject, parseXMLString } from "@antonytm/clixml-parser";
 import { PowershellCommandBuilder } from "./command-builder.js";
 
@@ -30,12 +30,14 @@ class PowershellClient {
 
         const scriptWithParameters = this.commandBuilder.buildCommandString(script, parameters);
         const body = `${scriptWithParameters}\r\n <#${uuid}#>\r\n`;
-        const response = await fetch(url, {
+        // PowerShell scripts can run longer than a typical REST call (rebuilds,
+        // publishing, etc.), so allow a larger, independently configurable timeout.
+        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 120000;
+        const response = await fetchWithTimeout(url, {
             method: 'POST',
             headers: headers,
             body: body,
-
-        });
+        }, timeoutMs);
 
         if (!response.ok) {
             throw new Error(`Error executing script: ${response.statusText}`);

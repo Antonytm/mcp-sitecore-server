@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getUserByFilterPowerShellTool(server: McpServer, config: Config) {
+export function getUserByFilterPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-get-user-by-filter",
         "Get a Sitecore users by filter.",

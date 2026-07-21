@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function enableUserPowerShellTool(server: McpServer, config: Config) {
+export function enableUserPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "security-enable-user",
         "Enables the Sitecore user account.",

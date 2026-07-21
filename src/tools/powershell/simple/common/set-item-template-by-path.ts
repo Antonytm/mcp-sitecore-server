@@ -1,10 +1,10 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { ToolServer } from "@/tool-server.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function setItemTemplateByPathPowerShellTool(server: McpServer, config: Config) {
+export function setItemTemplateByPathPowerShellTool(server: ToolServer, config: Config) {
     server.tool(
         "common-set-item-template-by-path",
         "Sets the item template by the item's path.",
