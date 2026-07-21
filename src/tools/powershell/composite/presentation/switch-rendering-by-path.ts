@@ -5,6 +5,7 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
+import { renderingLookupGuard, renderingNotFoundMessage } from "./rendering-guard.js";
 
 export function switchRenderingByPathPowershellTool(server: McpServer, config: Config) {
     server.registerTool(
@@ -38,13 +39,19 @@ export function switchRenderingByPathPowershellTool(server: McpServer, config: C
             switchRenderingParameters["Language"] = params.language;
             switchRenderingParameters["FinalLayout"] = getSwitchParameterValue(params.finalLayout);
 
+            const notFound = renderingNotFoundMessage(
+                `a rendering matching path '${params.oldRenderingPath}' on the item at path '${params.itemPath}'`,
+                "presentation-get-rendering-by-path"
+            );
+
             const command = `
                 $oldRendering = Get-Item -Path ${quotePowerShellString(params.oldRenderingPath)}
                 $sourceRenderings = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)} | Where-Object { $_.ItemID -ceq $oldRendering.ID.ToString() };
+                ${renderingLookupGuard("$sourceRenderings", notFound, { collection: true })}
                 $targetRendering = New-Rendering ${commandBuilder.buildParametersString(newRenderingParameters)}
                 foreach($sourceRendering in $sourceRenderings) {
                     Switch-Rendering -Instance $sourceRendering  -NewRendering $targetRendering ${commandBuilder.buildParametersString(switchRenderingParameters)}
-                }  
+                }
             `;
 
             return safeMcpResponse(runGenericPowershellCommand(config, command, {}));

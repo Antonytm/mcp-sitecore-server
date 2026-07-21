@@ -5,6 +5,7 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
+import { renderingLookupGuard, renderingNotFoundMessage } from "./rendering-guard.js";
 
 export function removeRenderingParameterByPathPowershellTool(server: McpServer, config: Config) {
     server.registerTool(
@@ -39,8 +40,14 @@ export function removeRenderingParameterByPathPowershellTool(server: McpServer, 
             setRenderingParameters["FinalLayout"] = getSwitchParameterValue(params.finalLayout);
             setRenderingParameters["Language"] = params.language;
 
+            const notFound = renderingNotFoundMessage(
+                `a rendering with unique ID '${params.renderingUniqueId}' on the item at path '${params.itemPath}'`,
+                "presentation-get-rendering-by-path"
+            );
+
             const command = `
                 $rendering = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)};
+                ${renderingLookupGuard("$rendering", notFound)}
                 Remove-RenderingParameter -Instance $rendering ${commandBuilder.buildParametersString(removeRenderingParameterParameters)} |
                     Set-Rendering ${commandBuilder.buildParametersString(setRenderingParameters)};
             `;

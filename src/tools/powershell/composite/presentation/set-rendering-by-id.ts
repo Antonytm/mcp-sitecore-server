@@ -5,6 +5,7 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
+import { renderingLookupGuard, renderingNotFoundMessage } from "./rendering-guard.js";
 
 export function setRenderingByIdPowershellTool(server: McpServer, config: Config) {
     server.registerTool(
@@ -44,8 +45,14 @@ export function setRenderingByIdPowershellTool(server: McpServer, config: Config
             setRenderingParameters["Index"] = getNumberParameterValue(params.index);
             setRenderingParameters["Parameter"] = params.parameter;
 
+            const notFound = renderingNotFoundMessage(
+                `a rendering with unique ID '${params.uniqueId}' on the item with ID '${params.itemId}' in database '${params.database}'`,
+                "presentation-get-rendering-by-id"
+            );
+
             const command = `
                 $rendering = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)};
+                ${renderingLookupGuard("$rendering", notFound)}
                 Set-Rendering -Instance $rendering ${commandBuilder.buildParametersString(setRenderingParameters)};
             `;
 

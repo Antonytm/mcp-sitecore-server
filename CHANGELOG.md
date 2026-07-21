@@ -86,5 +86,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- **Clearer errors when a rendering lookup finds nothing** (issue #62). The presentation
+  tools that resolve a rendering via `Get-Rendering` before acting on it previously failed
+  with the opaque PowerShell error "Cannot bind argument to parameter 'Instance' because it
+  is null." — or, for the switch tools, silently did nothing — when the item/rendering/
+  language/layout didn't match. A shared guard (`rendering-guard.ts`) now reports an
+  actionable error (via `Write-Error`, which the SPE transport returns as a normal
+  response rather than an opaque HTTP 500) naming what was searched for and pointing at
+  `presentation-get-rendering-by-id` / `-by-path` to list the item's renderings. Applied to
+  all ten affected tools: `set-rendering-by-id`/`-by-path`,
+  `set-/get-/remove-rendering-parameter-by-id`/`-by-path`, and
+  `switch-rendering-by-id`/`-by-path`.
 - Corrected the server description typo "Modle Context Protocol" → "Model Context Protocol".
 - Pinned `@antonytm/clixml-parser` to `^0.1.5` instead of the floating `latest` tag.
