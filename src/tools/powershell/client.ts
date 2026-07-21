@@ -30,9 +30,11 @@ class PowershellClient {
 
         const scriptWithParameters = this.commandBuilder.buildCommandString(script, parameters);
         const body = `${scriptWithParameters}\r\n <#${uuid}#>\r\n`;
-        // PowerShell scripts can run longer than a typical REST call (rebuilds,
-        // publishing, etc.), so allow a larger, independently configurable timeout.
-        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 120000;
+        // Default to 60s: most AI agents abort a tool call at ~60s anyway, so a longer
+        // default would just let the agent time out before we do. Still independently
+        // configurable via POWERSHELL_TIMEOUT_MS for long-running scripts (rebuilds,
+        // publishing) when the calling agent's timeout is raised to match.
+        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 60000;
         const response = await fetchWithTimeout(url, {
             method: 'POST',
             headers: headers,

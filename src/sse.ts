@@ -48,6 +48,11 @@ export async function startSSE() {
     }
   });
 
+  // Lightweight liveness endpoint for container/orchestrator health checks.
+  app.get('/health', (_req, res) => {
+    res.status(200).json({ status: 'ok' });
+  });
+
   // RFC 9728 OAuth Protected Resource Metadata — signals "no auth required"
   // so MCP clients (e.g. Claude Code) don't flag the server as needing auth
   // on proactive discovery probes. See streamable-http.ts for the full rationale.

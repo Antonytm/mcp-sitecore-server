@@ -230,7 +230,7 @@ Add the following Model Context Protocol server to your Cursor, VS Code, Claude:
 - `POWERSHELL_USERNAME`: The username for the Sitecore PowerShell Remoting API authentication.
 - `POWERSHELL_PASSWORD`: The password for the Sitecore PowerShell Remoting API authentication.
 - `POWERSHELL_SERVER_URL`: The base URL for the Sitecore PowerShell Remoting API.
-- `AUTORIZATION_HEADER`: Optional. If set, it will be used as an authorization header for access to the server. MCP server will expect `authorization` header to be passed with the value of this environment variable. If environment variable is not set, the server will not check for the authorization header.
+- `AUTHORIZATION_HEADER`: Optional. If set, it will be used as an authorization header for access to the server. MCP server will expect `authorization` header to be passed with the value of this environment variable. If environment variable is not set, the server will not check for the authorization header.
 
 ## Docker images
 

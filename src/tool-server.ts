@@ -1,25 +1,35 @@
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+
 /**
- * A minimal structural view of the MCP server as used by tool-registration functions.
+ * The MCP server type used by tool-registration functions.
  *
- * Tool files only ever call `server.tool(...)`. Referencing the full `McpServer` type
- * at every one of the ~140 registration call sites forces TypeScript to resolve the
- * SDK's heavily-overloaded, deeply-generic `tool()` signature against deep Zod schema
- * types over and over, which makes `tsc` exhaust its heap. These lightweight, non-generic
- * overloads avoid that: overload resolution is cheap and the handler's `params` gets a
- * contextual type (so it is not an implicit `any`). The real `McpServer` created in
- * server.ts is structurally assignable to this interface, so nothing changes at runtime.
+ * This is the SDK's own `McpServer` type — every member (`resource`, `prompt`,
+ * `connect`, …) comes straight from the SDK — with a single exception: the
+ * deprecated, heavily-overloaded generic `tool()` method is replaced with a
+ * non-generic equivalent.
  *
- * The trade-off is that `params` is typed as `any` inside handlers rather than being
- * inferred from the Zod schema. The Zod schema is still enforced at runtime by the SDK.
+ * Why override just `tool()`: the SDK's `tool<Args extends ZodRawShapeCompat>()`
+ * overloads infer the handler's parameter types from the Zod schema at every call
+ * site. Across this server's ~140 `server.tool(...)` registrations that overload
+ * resolution makes `tsc` exhaust its heap — annotating these functions with the raw
+ * `McpServer` type OOMs the type-checker (it does not complete even with an 8 GB
+ * heap), whereas this shim type-checks in a couple of seconds. The `tool()` method
+ * is `@deprecated` in the SDK (superseded by `registerTool`), so this only relaxes a
+ * method the SDK itself is moving away from.
+ *
+ * The concrete `McpServer` instance created in server.ts is assignable to this type,
+ * so runtime behaviour is unchanged. The only trade-off is that a handler's `params`
+ * is typed `any` rather than inferred from the Zod schema; the schema is still
+ * enforced at runtime by the SDK.
+ *
+ * TODO: drop this shim once the SDK's `tool()`/`registerTool()` typings no longer
+ * blow up `tsc` at this scale (to be raised upstream in @modelcontextprotocol/sdk).
  */
-export type ToolHandler = (params: any, extra: any) => unknown;
+type ToolHandler = (params: any, extra: any) => unknown;
 
-// A Zod raw shape or an annotations object — both are plain objects here.
-export type ToolObjectArg = Record<string, any>;
-
-export interface ToolServer {
+export type ToolServer = Omit<McpServer, "tool"> & {
     tool(name: string, cb: ToolHandler): unknown;
-    tool(name: string, descriptionOrSchema: string | ToolObjectArg, cb: ToolHandler): unknown;
-    tool(name: string, description: string, schema: ToolObjectArg, cb: ToolHandler): unknown;
-    tool(name: string, description: string, schema: ToolObjectArg, annotations: ToolObjectArg, cb: ToolHandler): unknown;
-}
+    tool(name: string, descriptionOrSchema: string | Record<string, any>, cb: ToolHandler): unknown;
+    tool(name: string, description: string, schema: Record<string, any>, cb: ToolHandler): unknown;
+    tool(name: string, description: string, schema: Record<string, any>, annotations: Record<string, any>, cb: ToolHandler): unknown;
+};

@@ -26,6 +26,6 @@ CMD ["node","dist/index.js"]
 # Expose port
 EXPOSE 3001
 
-# Report unhealthy if the HTTP endpoint stops responding.
+# Report unhealthy if the HTTP server stops responding on its liveness endpoint.
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
-  CMD wget -q -O - http://localhost:3001/.well-known/oauth-protected-resource || exit 1
+  CMD wget -q -O - http://localhost:3001/health || exit 1

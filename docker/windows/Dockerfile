@@ -35,7 +35,7 @@ CMD ["node","c:/app/dist/index.js"]
 # Expose port 3001
 EXPOSE 3001
 
-# Report unhealthy if the HTTP endpoint stops responding.
+# Report unhealthy if the HTTP server stops responding on its liveness endpoint.
 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
-  CMD powershell -command "try { Invoke-WebRequest -UseBasicParsing http://localhost:3001/.well-known/oauth-protected-resource | Out-Null; exit 0 } catch { exit 1 }"
+  CMD powershell -command "try { Invoke-WebRequest -UseBasicParsing http://localhost:3001/health | Out-Null; exit 0 } catch { exit 1 }"
 

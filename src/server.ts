@@ -50,9 +50,8 @@ export async function getServer(config: Config): Promise<McpServer> {
         }
     );
 
-    // registerAll accepts the lightweight ToolServer view (see tool-server.ts). The
-    // concrete McpServer is compatible at runtime; the cast just sidesteps the SDK's
-    // heavier tool() typing that the indirection is designed to avoid.
+    // The concrete McpServer only differs from ToolServer in the (deprecated) tool()
+    // overload we relax, so it is compatible at runtime; the cast bridges the two.
     await registerAll(server as unknown as ToolServer, config);
 
     return server;
