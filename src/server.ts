@@ -33,10 +33,11 @@ export async function getServer(config: Config): Promise<McpServer> {
         }
     );
 
-    server.tool(
+    server.registerTool(
         "config",
-        "Prints the configuration of the Sitecore MCP server.",
-        {},
+        {
+            description: "Prints the configuration of the Sitecore MCP server.",
+        },
         async (params) => {
             return {
                 content: [

@@ -6,13 +6,15 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function resetLayoutByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-reset-layout-by-path",
-        "Resets the layout of an item by path.",
         {
-            path: z.string().describe("The path of the item to reset the layout for.").default("master:"),
-            finalLayout: z.boolean().describe("Specifies layout to be reset. If 'true', the final layout is reset, otherwise - shared layout.").optional(),
-            language: z.string().describe("Specifies the item language to reset layout for.").optional(),
+            description: "Resets the layout of an item by path.",
+            inputSchema: {
+                path: z.string().describe("The path of the item to reset the layout for.").default("master:"),
+                finalLayout: z.boolean().describe("Specifies layout to be reset. If 'true', the final layout is reset, otherwise - shared layout.").optional(),
+                language: z.string().describe("Specifies the item language to reset layout for.").optional(),
+            },
         },
         async (params) => {
             const command = `Reset-Layout`;

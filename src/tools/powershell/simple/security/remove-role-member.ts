@@ -5,14 +5,16 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function removeRoleMemberPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-remove-role-member",
-        "Removes members from a Sitecore role.",
         {
-            identity: z.string()
-                .describe("The identity of the role to remove members from (e.g. 'CustomRole' or full path 'sitecore\\CustomRole')"),
-            members: z.string()
-                .describe("The members to remove from the role (comma-separated list of users or roles, e.g. 'sitecore\\user1,sitecore\\user2')"),
+            description: "Removes members from a Sitecore role.",
+            inputSchema: {
+                identity: z.string()
+                    .describe("The identity of the role to remove members from (e.g. 'CustomRole' or full path 'sitecore\\CustomRole')"),
+                members: z.string()
+                    .describe("The members to remove from the role (comma-separated list of users or roles, e.g. 'sitecore\\user1,sitecore\\user2')"),
+            },
         },
         async (params) => {
             const command = `Remove-RoleMember`;

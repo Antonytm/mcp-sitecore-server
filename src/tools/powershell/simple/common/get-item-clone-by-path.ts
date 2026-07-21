@@ -5,14 +5,16 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemCloneByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-clone-by-path",
-        "Returns all the clones for the specified item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to be analysed for clones presence."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Returns all the clones for the specified item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to be analysed for clones presence."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

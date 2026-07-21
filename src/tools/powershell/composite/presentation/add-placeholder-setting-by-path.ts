@@ -7,18 +7,20 @@ import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function addPlaceholderSettingByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-add-placeholder-setting-by-path",
-        "Adds a placeholder setting to the item specified by path.",
         {
-            itemPath: z.string().describe("The path of the item to add the placeholder setting to."),
-            placeholderSettingPath: z.string().describe("The path of the placeholder setting to add."),
-            key: z.string().describe("The key of the placeholder setting to add."),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout to add the rendering placeholder setting to. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item to add the placeholder setting to.").optional(),
+            description: "Adds a placeholder setting to the item specified by path.",
+            inputSchema: {
+                itemPath: z.string().describe("The path of the item to add the placeholder setting to."),
+                placeholderSettingPath: z.string().describe("The path of the placeholder setting to add."),
+                key: z.string().describe("The key of the placeholder setting to add."),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout to add the rendering placeholder setting to. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item to add the placeholder setting to.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

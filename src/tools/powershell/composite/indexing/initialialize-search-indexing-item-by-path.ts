@@ -6,16 +6,18 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { quotePowerShellString } from "../../command-builder.js";
 
 export function initializeSearchIndexingItemByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "indexing-initialize-search-index-item-by-path",
-        "Rebuilds the index for a given tree with the specified root item by path and index name. Supports wildcard filtering for the index name.",
         {
-            path: z.string()
-                .describe("The path of the item to rebuild the index for"),
-            indexName: z.string()
-                .default("sitecore_*_index")
-                .optional()
-                .describe("The name of the index to rebuild"),
+            description: "Rebuilds the index for a given tree with the specified root item by path and index name. Supports wildcard filtering for the index name.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to rebuild the index for"),
+                indexName: z.string()
+                    .default("sitecore_*_index")
+                    .optional()
+                    .describe("The name of the index to rebuild"),
+            },
         },
         async (params) => {
             const command = `

@@ -4,10 +4,11 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getCurrentUserPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-get-current-user",
-        "Get the current Sitecore user.",
-        {},
+        {
+            description: "Get the current Sitecore user.",
+        },
         async () => {
             const command = `Get-User`;
             const options: Record<string, any>= {

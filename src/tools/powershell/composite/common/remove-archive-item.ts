@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function removeArchiveItemPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-remove-archive-item",
-        "Removes items permanently from the specified archive.",
         {
-            archive: z.string()
-                .describe("The name of the archive to use when determining which items to remove."),
-            database: z.string()
-                .describe("The database for which the archives should be retrieved."),
-            itemId: z.string().optional()
-                .describe("The ID for the original item that should be processed."),
-            identity: z.string().optional()
-                .describe("The user responsible for moving the item to the archive."),
+            description: "Removes items permanently from the specified archive.",
+            inputSchema: {
+                archive: z.string()
+                    .describe("The name of the archive to use when determining which items to remove."),
+                database: z.string()
+                    .describe("The database for which the archives should be retrieved."),
+                itemId: z.string().optional()
+                    .describe("The ID for the original item that should be processed."),
+                identity: z.string().optional()
+                    .describe("The user responsible for moving the item to the archive."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

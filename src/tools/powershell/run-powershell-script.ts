@@ -5,12 +5,14 @@ import { z } from "zod";
 import { runGenericPowershellCommand } from "./simple/generic.js";
 
 export function runPowershellScriptTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "run-powershell-script",
-        "Runs a PowerShell script and returns the output.",
         {
-            script: z.string()
-                .describe("The Powershell script to run."),
+            description: "Runs a PowerShell script and returns the output.",
+            inputSchema: {
+                script: z.string()
+                    .describe("The Powershell script to run."),
+            },
         },
         async (params) => {
             const command = params.script;

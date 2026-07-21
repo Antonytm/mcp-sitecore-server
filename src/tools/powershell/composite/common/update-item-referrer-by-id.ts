@@ -6,20 +6,22 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function updateItemReferrerByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-update-item-referrer-by-id",
-        "Updates all references to the specified item (by its ID) to point to a new provided in the -NewTarget or removes links to the item.",
         {
-            id: z.string()
-                .describe("The ID of the item to be relinked."),
-            newTarget: z.string().optional()
-                .describe("The path to a new item the links should be pointing to."),
-            removeLink: z.boolean().optional()
-                .describe("Removes all links to the current target item."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)"),
-            language: z.string().optional()
-                .describe("The language of the item."),
+            description: "Updates all references to the specified item (by its ID) to point to a new provided in the -NewTarget or removes links to the item.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to be relinked."),
+                newTarget: z.string().optional()
+                    .describe("The path to a new item the links should be pointing to."),
+                removeLink: z.boolean().optional()
+                    .describe("Removes all links to the current target item."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)"),
+                language: z.string().optional()
+                    .describe("The language of the item."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

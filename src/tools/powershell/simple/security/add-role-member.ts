@@ -5,14 +5,16 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function addRoleMemberPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-add-role-member",
-        "Adds a member to a Sitecore role.",
         {
-            identity: z.string()
-                .describe("The identity of the role to add members to (e.g. 'CustomRole' or full path 'sitecore\\CustomRole')"),
-            members: z.string()
-                .describe("The members to add to the role (comma-separated list of users or roles, e.g. 'sitecore\\user1,sitecore\\user2')"),
+            description: "Adds a member to a Sitecore role.",
+            inputSchema: {
+                identity: z.string()
+                    .describe("The identity of the role to add members to (e.g. 'CustomRole' or full path 'sitecore\\CustomRole')"),
+                members: z.string()
+                    .describe("The members to add to the role (comma-separated list of users or roles, e.g. 'sitecore\\user1,sitecore\\user2')"),
+            },
         },
         async (params) => {
             const command = `Add-RoleMember`;

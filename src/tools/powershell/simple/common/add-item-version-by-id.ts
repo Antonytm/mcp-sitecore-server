@@ -6,26 +6,28 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function addItemVersionByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-add-item-version-by-id",
-        "Creates a version of the item (by its id) in a new language based on an existing language version.",
         {
-            id: z.string()
-                .describe("The id of the item to add version for."),
-            language: z.string().optional()
-                .describe("Language that will be used as source language. If not specified the current user language will be used."),
-            targetLanguage: z.string().optional()
-                .describe("Language that should be created."),
-            recurse: z.boolean().optional()
-                .describe("Process the item and all of its children."),
-            ifExist: z.enum(["Append", "Skip", "OverwriteLatest"]).default("Append"),
-            ifNoSourceVersion: z.enum(["Skip", "Add"]).default("Skip"),
-            doNotCopyFields: z.boolean().optional()
-                .describe("Creates a new version in the target language but does not copy field values from the original language."),
-            ignoredFields: z.array(z.string()).optional()
-                .describe("List of fields that should not be copied over from original item."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)."),
+            description: "Creates a version of the item (by its id) in a new language based on an existing language version.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The id of the item to add version for."),
+                language: z.string().optional()
+                    .describe("Language that will be used as source language. If not specified the current user language will be used."),
+                targetLanguage: z.string().optional()
+                    .describe("Language that should be created."),
+                recurse: z.boolean().optional()
+                    .describe("Process the item and all of its children."),
+                ifExist: z.enum(["Append", "Skip", "OverwriteLatest"]).default("Append"),
+                ifNoSourceVersion: z.enum(["Skip", "Add"]).default("Skip"),
+                doNotCopyFields: z.boolean().optional()
+                    .describe("Creates a new version in the target language but does not copy field values from the original language."),
+                ignoredFields: z.array(z.string()).optional()
+                    .describe("List of fields that should not be copied over from original item."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)."),
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

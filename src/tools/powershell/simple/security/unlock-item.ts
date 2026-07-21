@@ -5,14 +5,16 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function unlockItemPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-unlock-item-by-id",
-        "Unlocks a Sitecore item by its ID.",
         {
-            id: z.string().describe("The ID of the item to unlock"),
-            force: z.boolean().optional().describe("When specified the item is unlocked regardless of the owner"),
-            passThru: z.boolean().optional().describe("When specified returns the item to the pipeline"),
-            database: z.string().optional().describe("The database containing the item"),
+            description: "Unlocks a Sitecore item by its ID.",
+            inputSchema: {
+                id: z.string().describe("The ID of the item to unlock"),
+                force: z.boolean().optional().describe("When specified the item is unlocked regardless of the owner"),
+                passThru: z.boolean().optional().describe("When specified returns the item to the pipeline"),
+                database: z.string().optional().describe("The database containing the item"),
+            },
         },
         async (params) => {
             const command = `Unlock-Item`;
@@ -36,18 +38,20 @@ export function unlockItemPowerShellTool(server: McpServer, config: Config) {
         }
     );
 
-    server.tool(
+    server.registerTool(
         "security-unlock-item-by-path",
-        "Unlocks a Sitecore item by its path.",
         {
-            path: z.string()
-                .describe("The path to the item to unlock"),
-            force: z.boolean().optional()
-                .describe("When specified the item is unlocked regardless of the owner"),
-            passThru: z.boolean().optional()
-                .describe("When specified returns the item to the pipeline"),
-            database: z.string().optional()
-                .describe("The database containing the item"),
+            description: "Unlocks a Sitecore item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path to the item to unlock"),
+                force: z.boolean().optional()
+                    .describe("When specified the item is unlocked regardless of the owner"),
+                passThru: z.boolean().optional()
+                    .describe("When specified returns the item to the pipeline"),
+                database: z.string().optional()
+                    .describe("The database containing the item"),
+            },
         },
         async (params) => {
             const command = `Unlock-Item`;

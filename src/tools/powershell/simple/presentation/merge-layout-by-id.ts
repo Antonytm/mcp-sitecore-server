@@ -5,13 +5,15 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function mergeLayoutByIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-merge-layout-by-id",
-        "Merges final and shared layouts by item Id.",
         {
-            id: z.string().describe("The ID of the item to merge layout for."),
-            database: z.string().optional().describe("The database to merge layout for."),
-            language: z.string().optional().describe("The item language to merge layout for."),
+            description: "Merges final and shared layouts by item Id.",
+            inputSchema: {
+                id: z.string().describe("The ID of the item to merge layout for."),
+                database: z.string().optional().describe("The database to merge layout for."),
+                language: z.string().optional().describe("The item language to merge layout for."),
+            },
         },
         async (params) => {
             const command = `Merge-Layout`;

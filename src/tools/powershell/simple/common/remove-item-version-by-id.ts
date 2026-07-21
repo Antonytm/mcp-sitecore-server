@@ -6,24 +6,26 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function removeItemVersionByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-remove-item-version-by-id",
-        "Removes a version of a Sitecore item by ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to remove version for."),
-            language: z.string()
-                .describe("Language that should be deleted form the provided item. Language parameter supports globbing so you can delete whole language groups using wildcards."),
-            version: z.string().optional()
-                .describe("Version that should be deleted form the provided item. Version parameter supports globbing so you can delete whole version groups using wildcards."),
-            recurse: z.boolean().optional()
-                .describe("Removes language versions from the item and all of its children."),
-            maxRecentVersions: z.number().optional()
-                .describe("Trims the selected language to value specified by this parameter."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)."),
-            archive: z.boolean().optional()
-                .describe("Moves the items to the archive rather than recycle bin."),
+            description: "Removes a version of a Sitecore item by ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to remove version for."),
+                language: z.string()
+                    .describe("Language that should be deleted form the provided item. Language parameter supports globbing so you can delete whole language groups using wildcards."),
+                version: z.string().optional()
+                    .describe("Version that should be deleted form the provided item. Version parameter supports globbing so you can delete whole version groups using wildcards."),
+                recurse: z.boolean().optional()
+                    .describe("Removes language versions from the item and all of its children."),
+                maxRecentVersions: z.number().optional()
+                    .describe("Trims the selected language to value specified by this parameter."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)."),
+                archive: z.boolean().optional()
+                    .describe("Moves the items to the archive rather than recycle bin."),
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

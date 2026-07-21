@@ -4,10 +4,11 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getDefaultLayoutDevicePowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-get-default-layout-device",
-        "Gets the default layout.",
-        {},
+        {
+            description: "Gets the default layout.",
+        },
         async () => {
             const command = `Get-LayoutDevice -Default`;
 

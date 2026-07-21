@@ -5,16 +5,18 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function testBaseTemplateByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-test-base-template-by-id",
-        "Checks if the item inherits from the specified template by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to сheck template inheritance for."),
-            template: z.string()
-                .describe("The ID or path of the template to be analyzed."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Checks if the item inherits from the specified template by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to сheck template inheritance for."),
+                template: z.string()
+                    .describe("The ID or path of the template to be analyzed."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

@@ -5,11 +5,13 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function disableUserPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-disable-user",
-        "Disables the Sitecore user account.",
         {
-            identity: z.string(),
+            description: "Disables the Sitecore user account.",
+            inputSchema: {
+                identity: z.string(),
+            },
         },
         async (params) => {
             const command = `Disable-User`;

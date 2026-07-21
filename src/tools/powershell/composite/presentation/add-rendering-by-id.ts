@@ -7,21 +7,23 @@ import { PowershellCommandBuilder, quotePowerShellString } from "../../command-b
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
 export function addRenderingByIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-add-rendering-by-id",
-        "Adds a rendering to presentation of an item specified by item ID.",
         {
-            itemId: z.string().describe("The ID of the item to add the rendering to."),
-            renderingId: z.string().describe("The ID of the rendering to add."),
-            database: z.string().describe("The context database.").optional().default("master"),
-            placeHolder: z.string().describe("The placeholder to add the rendering to."),
-            dataSource: z.string().describe("The rendering data source.").optional(),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout to add the rendering to. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item to add the rendering to.").optional(),
-            index: z.number().describe("The index at which the Rendering should be inserted.").optional(),
+            description: "Adds a rendering to presentation of an item specified by item ID.",
+            inputSchema: {
+                itemId: z.string().describe("The ID of the item to add the rendering to."),
+                renderingId: z.string().describe("The ID of the rendering to add."),
+                database: z.string().describe("The context database.").optional().default("master"),
+                placeHolder: z.string().describe("The placeholder to add the rendering to."),
+                dataSource: z.string().describe("The rendering data source.").optional(),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout to add the rendering to. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item to add the rendering to.").optional(),
+                index: z.number().describe("The index at which the Rendering should be inserted.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

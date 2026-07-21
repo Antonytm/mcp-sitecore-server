@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function convertFromItemCloneByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-convert-from-item-clone-by-path",
-        "Converts an item from a clone to a fully independent item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to be analysed for clones presence."),
-            recurse: z.boolean().optional()
-                .describe("Converts the whole branch rather than a single item."),
-            passThru : z.boolean().optional()
-                .describe("Returns the item that was converted from a clone."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Converts an item from a clone to a fully independent item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to be analysed for clones presence."),
+                recurse: z.boolean().optional()
+                    .describe("Converts the whole branch rather than a single item."),
+                passThru : z.boolean().optional()
+                    .describe("Returns the item that was converted from a clone."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

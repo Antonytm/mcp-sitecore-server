@@ -7,19 +7,21 @@ import { PowershellCommandBuilder, quotePowerShellString } from "../../command-b
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function switchRenderingByUniqueIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-switch-rendering-by-unique-id",
-        "Switches an existing rendering specified by unique ID with an alternate one for the item specified by item ID.",
         {
-            itemId: z.string().describe("The ID of the item holding the rendering."),
-            uniqueId: z.string().describe("The unique ID of the rendering to switch."),       
-            newRenderingId: z.string().describe("The ID of the new rendering."),
-            database: z.string().describe("The context database.").optional().default("master"),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item holding the renderings.").optional(),
+            description: "Switches an existing rendering specified by unique ID with an alternate one for the item specified by item ID.",
+            inputSchema: {
+                itemId: z.string().describe("The ID of the item holding the rendering."),
+                uniqueId: z.string().describe("The unique ID of the rendering to switch."),       
+                newRenderingId: z.string().describe("The ID of the new rendering."),
+                database: z.string().describe("The context database.").optional().default("master"),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item holding the renderings.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

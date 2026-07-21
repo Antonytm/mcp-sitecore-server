@@ -78,41 +78,19 @@ export function inferToolAnnotations(name: string): ToolAnnotations {
     return { title, readOnlyHint: true };
 }
 
-function looksLikeAnnotations(value: unknown): boolean {
-    if (!value || typeof value !== "object") {
-        return false;
-    }
-    return [
-        "readOnlyHint",
-        "destructiveHint",
-        "idempotentHint",
-        "openWorldHint",
-    ].some((key) => key in (value as Record<string, unknown>));
-}
-
 /**
- * Patches `server.tool` so that every tool registered afterwards automatically gets
- * inferred annotations (unless the caller already supplied its own). This centralizes
- * annotation metadata instead of repeating it across ~140 tool files.
+ * Patches `server.registerTool` so that every tool registered afterwards automatically
+ * gets inferred annotations (unless the caller already supplied its own in the config
+ * object). This centralizes annotation metadata instead of repeating it across ~140 tool
+ * files.
  */
 export function withInferredAnnotations(server: McpServer): McpServer {
-    const originalTool = server.tool.bind(server) as (...args: any[]) => any;
+    const originalRegisterTool = server.registerTool.bind(server) as (...args: any[]) => any;
 
-    (server as any).tool = (name: string, ...rest: any[]) => {
-        if (rest.length === 0) {
-            return originalTool(name);
-        }
-
-        const cb = rest[rest.length - 1];
-        const middle = rest.slice(0, -1);
-
-        // Respect an explicitly-provided annotations object.
-        if (middle.some(looksLikeAnnotations)) {
-            return originalTool(name, ...rest);
-        }
-
-        const annotations = inferToolAnnotations(name);
-        return originalTool(name, ...middle, annotations, cb);
+    (server as any).registerTool = (name: string, config: Record<string, any>, cb: any) => {
+        // Respect explicitly-provided annotations; otherwise infer them from the tool name.
+        const annotations = config?.annotations ?? inferToolAnnotations(name);
+        return originalRegisterTool(name, { ...config, annotations }, cb);
     };
 
     return server;

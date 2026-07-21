@@ -5,11 +5,13 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getUserByIdentityPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-get-user-by-identity",
-        "Get a Sitecore user by its name.",
         {
-            identity: z.string(),
+            description: "Get a Sitecore user by its name.",
+            inputSchema: {
+                identity: z.string(),
+            },
         },
         async (params) => {
             const command = `Get-User`;

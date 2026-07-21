@@ -7,18 +7,20 @@ import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function setRenderingParameterByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-set-rendering-parameter-by-path",
-        "Adds and updates the specified rendering parameter from the rendering placed on the item specified by path.",
         {
-            itemPath: z.string().describe("The path of the item holding the rendering."),
-            renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
-            parameter: z.record(z.string(), z.string()).describe("The rendering parameter to add or update."),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The item language varsion.").optional(),
+            description: "Adds and updates the specified rendering parameter from the rendering placed on the item specified by path.",
+            inputSchema: {
+                itemPath: z.string().describe("The path of the item holding the rendering."),
+                renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
+                parameter: z.record(z.string(), z.string()).describe("The rendering parameter to add or update."),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The item language varsion.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

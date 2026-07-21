@@ -6,10 +6,11 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 export function getPowershellDocumentationTool(server: McpServer) {
-    server.tool(
+    server.registerTool(
         "get-powershell-documentation",
-        "Gets the documentation describing all Sitecore Powershell commands.",
-        {},
+        {
+            description: "Gets the documentation describing all Sitecore Powershell commands.",
+        },
         async () => {
             const getMarkdown = async (): Promise<CallToolResult> => {
                 const __filename = fileURLToPath(import.meta.url);

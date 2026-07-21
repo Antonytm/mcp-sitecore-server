@@ -7,20 +7,22 @@ import { getSwitchParameterValue } from "../../utils.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 
 export function newItemCloneByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-new-item-clone-by-path",
-        "Creates a new item clone based on the item provided by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to be cloned."),
-            destination: z.string()
-                .describe("The path of a parent item under which the clone should be created."),
-            name: z.string()
-                .describe("The name of the item clone."),
-            recurse: z.boolean().optional()
-                .describe("Adds the parameter to clone the whole branch rather than a single item."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Creates a new item clone based on the item provided by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to be cloned."),
+                destination: z.string()
+                    .describe("The path of a parent item under which the clone should be created."),
+                name: z.string()
+                    .describe("The name of the item clone."),
+                recurse: z.boolean().optional()
+                    .describe("Adds the parameter to clone the whole branch rather than a single item."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

@@ -5,14 +5,16 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemTemplateByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-template-by-path",
-        "Gets template information for a Sitecore item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to retrieve template information for (e.g. /sitecore/content/Home)."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Gets template information for a Sitecore item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to retrieve template information for (e.g. /sitecore/content/Home)."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

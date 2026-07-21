@@ -7,19 +7,21 @@ import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function getRenderingParameterByIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-get-rendering-parameter-by-id",
-        "Gets rendering parameter for the item specified by ID.",
         {
-            itemId: z.string().describe("The ID of the item holding the rendering."),
-            renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
-            database: z.string().describe("The context database.").optional().default("master"),
-            name: z.string().describe("The name of the rendering parameter to get.").optional(),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The item language varsion.").optional(),
+            description: "Gets rendering parameter for the item specified by ID.",
+            inputSchema: {
+                itemId: z.string().describe("The ID of the item holding the rendering."),
+                renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
+                database: z.string().describe("The context database.").optional().default("master"),
+                name: z.string().describe("The name of the rendering parameter to get.").optional(),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The item language varsion.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

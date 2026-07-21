@@ -5,11 +5,13 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getRoleByFilterPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-get-role-by-filter",
-        "Get Sitecore roles by filter criteria.",
         {
-            filter: z.string().describe("The filter criteria to search for roles (e.g. 'sitecore\\*' or '*Author*')"),
+            description: "Get Sitecore roles by filter criteria.",
+            inputSchema: {
+                filter: z.string().describe("The filter criteria to search for roles (e.g. 'sitecore\\*' or '*Author*')"),
+            },
         },
         async (params) => {
             const command = `Get-Role`;

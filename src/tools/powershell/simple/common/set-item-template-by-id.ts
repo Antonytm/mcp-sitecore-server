@@ -5,18 +5,20 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function setItemTemplateByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-set-item-template-by-id",
-        "Sets the item template by the item's ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to set the template for."),
-            template: z.string()
-                .describe("The path representing the template item."),
-            fieldsToCopy: z.record(z.string(), z.string()).optional()
-                .describe("The key-value pairs map the old template fields to the new template fields. The key represents the old template field, and the value represents the new template field."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Sets the item template by the item's ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to set the template for."),
+                template: z.string()
+                    .describe("The path representing the template item."),
+                fieldsToCopy: z.record(z.string(), z.string()).optional()
+                    .describe("The key-value pairs map the old template fields to the new template fields. The key represents the old template field, and the value represents the new template field."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

@@ -68,6 +68,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   directly with no custom indirection. `tsconfig.json` was migrated for TS7:
   `moduleResolution` is now `"bundler"` and the removed `baseUrl` option was dropped (path
   aliases retained as `"@/*": ["./src/*"]`).
+- **Migrated all tool registrations from the deprecated `server.tool()` to
+  `server.registerTool()`.** The SDK deprecated `tool()` in favour of `registerTool()`;
+  every registration now passes a config object (`{ description, inputSchema }`) and the
+  `withInferredAnnotations` wrapper injects annotations into that config rather than as a
+  positional argument. (Feasible now that the TypeScript 7 switch removed the overload-
+  resolution heap blow-up that affected `tool()` and `registerTool()` alike.)
 - Normalized all `McpServer` imports to the `.js` module specifier for consistency.
 - Docker images pinned to **Node 24** (Linux previously floated on `node:lts-alpine`;
   Windows previously pinned Node 22), matching the CI Node version. `@types/node` bumped

@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { quotePowerShellString } from "../../command-builder.js";
 
 export function setLayoutIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-set-layout-by-id",
-        "Sets layout for an item specified by Id.",
         {
-            itemId: z.string().describe("The Id of the item to set the layout for."),
-            layoutPath: z.string().describe("The path of the layout.").default("master:"),
-            layoutId: z.string().describe("The ID of the layout to set for the item."),
-            language: z.string().describe("The language of the item to set layout for.").optional(),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout to be updated. If 'true', the final layout is set, otherwise - shared layout.")
-                .optional(),
+            description: "Sets layout for an item specified by Id.",
+            inputSchema: {
+                itemId: z.string().describe("The Id of the item to set the layout for."),
+                layoutPath: z.string().describe("The path of the layout.").default("master:"),
+                layoutId: z.string().describe("The ID of the layout to set for the item."),
+                language: z.string().describe("The language of the item to set layout for.").optional(),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout to be updated. If 'true', the final layout is set, otherwise - shared layout.")
+                    .optional(),
+            },
         },
         async (params) => {
             const command = `
@@ -28,5 +30,6 @@ export function setLayoutIdPowershellTool(server: McpServer, config: Config) {
             `.replaceAll(/[\n]+/g, "");
 
             return safeMcpResponse(runGenericPowershellCommand(config, command, {}));
-        });
+        }
+    );
 }

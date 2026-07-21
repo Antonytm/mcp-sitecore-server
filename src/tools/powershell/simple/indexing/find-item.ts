@@ -90,25 +90,27 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
     }
 
     //https://doc.sitecorepowershell.com/appendix/indexing/find-item
-    server.tool(
+    server.registerTool(
         "indexing-find-item",
-        "Finds items using the Sitecore Content Search API. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z').",
         {
-            index: z.string().optional()
-                .default("sitecore_master_index").describe("The name of the Sitecore index to search in. e.g., 'sitecore_master_index', 'sitecore_web_index'."),
-            //array of objects
-            criteria: z.array(
-                z.object({
-                    filter: z.enum(filterValues as [string, ...string[]]).describe("The type of filter to apply to the search criteria."),
-                    field: z.enum(
-                        [...allFieldsCommandResult] as [string, ...string[]]
-                    ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}`),
-                    value: z.string().describe("The value to search for."),
+            description: "Finds items using the Sitecore Content Search API. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z').",
+            inputSchema: {
+                index: z.string().optional()
+                    .default("sitecore_master_index").describe("The name of the Sitecore index to search in. e.g., 'sitecore_master_index', 'sitecore_web_index'."),
+                //array of objects
+                criteria: z.array(
+                    z.object({
+                        filter: z.enum(filterValues as [string, ...string[]]).describe("The type of filter to apply to the search criteria."),
+                        field: z.enum(
+                            [...allFieldsCommandResult] as [string, ...string[]]
+                        ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}`),
+                        value: z.string().describe("The value to search for."),
 
-                })
-            ),
-            first: z.number().optional().default(200).describe("The maximum number of results to return. Defaults to 200."),
-            skip: z.number().optional().default(0).describe("The number of results to skip. Defaults to 0."),
+                    })
+                ),
+                first: z.number().optional().default(200).describe("The maximum number of results to return. Defaults to 200."),
+                skip: z.number().optional().default(0).describe("The number of results to skip. Defaults to 0."),
+            },
         },
         async (params) => {
 

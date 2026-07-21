@@ -5,12 +5,14 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getDatabasePowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-database",
-        "Gets information about Sitecore databases.",
         {
-            name: z.string().optional()
-                .describe("The name of the database to retrieve (e.g. 'master', 'core', 'web'). If not provided, all databases will be returned.")
+            description: "Gets information about Sitecore databases.",
+            inputSchema: {
+                name: z.string().optional()
+                    .describe("The name of the database to retrieve (e.g. 'master', 'core', 'web'). If not provided, all databases will be returned.")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {};

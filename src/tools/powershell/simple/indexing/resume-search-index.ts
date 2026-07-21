@@ -5,11 +5,13 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function resumeSearchIndexPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "indexing-resume-search-index",
-        "Resume one or more Sitecore search indexes. If no name is provided, all paused indexes will be resumed.",
         {
-            name: z.string().optional().describe("The name of the index to resume. If not provided, all paused indexes will be resumed."),
+            description: "Resume one or more Sitecore search indexes. If no name is provided, all paused indexes will be resumed.",
+            inputSchema: {
+                name: z.string().optional().describe("The name of the index to resume. If not provided, all paused indexes will be resumed."),
+            },
         },
         async (params) => {
             const command = `Resume-SearchIndex`;

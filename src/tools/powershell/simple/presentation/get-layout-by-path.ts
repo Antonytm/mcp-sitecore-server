@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function getLayoutByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-get-layout-by-path",
-        "Gets item layout by path.",
         {
-            path: z.string().describe("The path of the item to retrieve layout for.").default("master:"),
-            finalLayout: z
-                .boolean()
-                .optional()
-                .describe("Specifies layout to be retrieved. If 'true', the final layout is retrieved, otherwise - shared layout."),
-            language: z.string()
-                .optional()
-                .describe("Specifies the item language to retrieve layout."),
+            description: "Gets item layout by path.",
+            inputSchema: {
+                path: z.string().describe("The path of the item to retrieve layout for.").default("master:"),
+                finalLayout: z
+                    .boolean()
+                    .optional()
+                    .describe("Specifies layout to be retrieved. If 'true', the final layout is retrieved, otherwise - shared layout."),
+                language: z.string()
+                    .optional()
+                    .describe("Specifies the item language to retrieve layout."),
+            },
         },
         async (params) => {
             const command = `Get-Layout`;

@@ -5,16 +5,18 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function clearItemAclPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-clear-item-acl-by-id",
-        "Clears all access rules from a Sitecore item by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to clear ACL for"),
-            passThru: z.boolean().optional()
-                .describe("If set to true, passes the processed object back to the pipeline"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)")
+            description: "Clears all access rules from a Sitecore item by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to clear ACL for"),
+                passThru: z.boolean().optional()
+                    .describe("If set to true, passes the processed object back to the pipeline"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)")
+            },
         },
         async (params) => {
             const command = `Clear-ItemAcl`;
@@ -34,16 +36,18 @@ export function clearItemAclPowerShellTool(server: McpServer, config: Config) {
         }
     );
 
-    server.tool(
+    server.registerTool(
         "security-clear-item-acl-by-path",
-        "Clears all access rules from a Sitecore item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to clear ACL for (e.g. /sitecore/content/Home)"),
-            passThru: z.boolean().optional()
-                .describe("If set to true, passes the processed object back to the pipeline"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)")
+            description: "Clears all access rules from a Sitecore item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to clear ACL for (e.g. /sitecore/content/Home)"),
+                passThru: z.boolean().optional()
+                    .describe("If set to true, passes the processed object back to the pipeline"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)")
+            },
         },
         async (params) => {
             const command = `Clear-ItemAcl`;

@@ -7,20 +7,22 @@ import { PowershellCommandBuilder, quotePowerShellString } from "../../command-b
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
 export function addRenderingByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-add-rendering-by-path",
-        "Adds a rendering to presentation of an item specified by path.",
         {
-            itemPath: z.string().describe("The path of the item to add the rendering to."),
-            renderingPath: z.string().describe("The path of the rendering to add."),
-            placeHolder: z.string().describe("The placeholder to add the rendering to."),
-            dataSource: z.string().describe("The rendering data source.").optional(),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout to add the rendering to. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item to add the rendering to.").optional(),
-            index: z.number().describe("The index at which the Rendering should be inserted.").optional(),
+            description: "Adds a rendering to presentation of an item specified by path.",
+            inputSchema: {
+                itemPath: z.string().describe("The path of the item to add the rendering to."),
+                renderingPath: z.string().describe("The path of the rendering to add."),
+                placeHolder: z.string().describe("The placeholder to add the rendering to."),
+                dataSource: z.string().describe("The rendering data source.").optional(),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout to add the rendering to. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item to add the rendering to.").optional(),
+                index: z.number().describe("The index at which the Rendering should be inserted.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

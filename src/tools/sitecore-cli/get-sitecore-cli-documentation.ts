@@ -7,10 +7,11 @@ import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
 export function getSitecoreCliDocumentation(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "sitecore-cli-documentation",
-        "Gets Sitecore CLI documentation describing the most often used commands like index rebuild, item serialization, etc.",
-        { },
+        {
+            description: "Gets Sitecore CLI documentation describing the most often used commands like index rebuild, item serialization, etc.",
+        },
         async (params) => {
             const getMarkdown = async (): Promise<CallToolResult> => {
                 const __filename = fileURLToPath(import.meta.url);

@@ -6,14 +6,16 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function getArchivePowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-archive",
-        "Gets Sitecore database archives.",
         {
-            name: z.string().optional()
-                .describe("The name of the archive to retrieve."),
-            database: z.string().optional()
-                .describe("The database for which the archives should be retrieved."),
+            description: "Gets Sitecore database archives.",
+            inputSchema: {
+                name: z.string().optional()
+                    .describe("The name of the archive to retrieve."),
+                database: z.string().optional()
+                    .describe("The database for which the archives should be retrieved."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

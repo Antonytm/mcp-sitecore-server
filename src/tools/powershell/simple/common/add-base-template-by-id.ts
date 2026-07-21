@@ -5,16 +5,18 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function addBaseTemplateByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-add-base-template-by-id",
-        "Adds a base template to a template item by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to add the base template to."),
-            template: z.string()
-                .describe("The path representing the template item to add as a base template."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Adds a base template to a template item by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to add the base template to."),
+                template: z.string()
+                    .describe("The path representing the template item to add as a base template."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

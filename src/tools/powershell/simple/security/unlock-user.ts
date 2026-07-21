@@ -5,12 +5,14 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function unlockUserPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-unlock-user",
-        "Unlocks a Sitecore user account that has been locked out due to failed login attempts.",
         {
-            identity: z.string()
-                .describe("The identity of the user to unlock (e.g. 'admin' or full path 'sitecore\\admin')"),
+            description: "Unlocks a Sitecore user account that has been locked out due to failed login attempts.",
+            inputSchema: {
+                identity: z.string()
+                    .describe("The identity of the user to unlock (e.g. 'admin' or full path 'sitecore\\admin')"),
+            },
         },
         async (params) => {
             const command = `Unlock-User`;

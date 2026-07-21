@@ -5,18 +5,20 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemReferrerByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-referrer-by-id",
-        "Gets items referring to a Sitecore item by its ID, showing which items reference it.",
         {
-            id: z.string()
-                .describe("The ID of the item to retrieve referrers for"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)"),
-            language: z.string().optional()
-                .describe("The language of the item to check referrers for"),
-            version: z.string().optional()
-                .describe("The version of the item to check referrers for"),
+            description: "Gets items referring to a Sitecore item by its ID, showing which items reference it.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to retrieve referrers for"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)"),
+                language: z.string().optional()
+                    .describe("The language of the item to check referrers for"),
+                version: z.string().optional()
+                    .describe("The version of the item to check referrers for"),
+            },
         },
         async (params) => {
             const command = `Get-ItemReferrer`;

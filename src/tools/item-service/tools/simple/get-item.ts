@@ -5,19 +5,21 @@ import { getItemById } from "../../logic/simple/get-item.js";
 import { safeMcpResponse } from "@/helper.js";
 
 export function getItemTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         'item-service-get-item',
-        "Get a Sitecore item by its ID.",
         {
-            id: z.string(),
-            options: z.object({
-                database: z.string().optional(),
-                language: z.string().optional(),
-                version: z.string().optional(),
-                includeStandardTemplateFields: z.boolean().optional(),
-                includeMetadata: z.boolean().optional(),
-                fields: z.array(z.string()).optional(),
-            }).optional(),
+            description: "Get a Sitecore item by its ID.",
+            inputSchema: {
+                id: z.string(),
+                options: z.object({
+                    database: z.string().optional(),
+                    language: z.string().optional(),
+                    version: z.string().optional(),
+                    includeStandardTemplateFields: z.boolean().optional(),
+                    includeMetadata: z.boolean().optional(),
+                    fields: z.array(z.string()).optional(),
+                }).optional(),
+            },
         },
         async (params) => {
             return safeMcpResponse(getItemById(config, params.id, params.options || {}));

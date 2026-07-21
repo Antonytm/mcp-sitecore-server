@@ -7,18 +7,20 @@ import { PowershellCommandBuilder, quotePowerShellString } from "../../command-b
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function switchRenderingByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-switch-rendering-by-path",
-        "Switches an existing rendering specified by path with an alternate one for the item specified by path.",
         {
-            itemPath: z.string().describe("The path of the item holding the renderings."),
-            oldRenderingPath: z.string().describe("The path of the rendering to switch."),
-            newRenderingPath: z.string().describe("The path of the new rendering."),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item holding the renderings.").optional(),
+            description: "Switches an existing rendering specified by path with an alternate one for the item specified by path.",
+            inputSchema: {
+                itemPath: z.string().describe("The path of the item holding the renderings."),
+                oldRenderingPath: z.string().describe("The path of the rendering to switch."),
+                newRenderingPath: z.string().describe("The path of the new rendering."),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item holding the renderings.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

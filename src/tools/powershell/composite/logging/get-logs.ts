@@ -33,29 +33,31 @@ function formatDate(date?: string): string {
 }
 
 export function getLogsPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         `logging-get-logs`,
-        `Retrieves Sitecore logs from the log directory.`,
         {
-            name: z.string()
-                // Restrict to a safe filename charset: this value is interpolated into a
-                // PowerShell path glob (alongside the $SitecoreDataFolder variable), so it
-                // cannot be single-quoted. Disallowing shell metacharacters prevents injection.
-                .regex(/^[A-Za-z0-9._*-]*$/, "name may only contain letters, digits, '.', '_', '-' and '*'")
-                .optional()
-                .default("log")
-                .describe(`The name of the log file to retrieve. If not provided, defaults to log.*. Possible options: ${logFilePrefixes.join(", ")}.`),
-            level: z.enum(Object.values(LogLevel) as [string, ...[string]])
-                .optional()
-                .default(LogLevel.DEBUG)
-                .describe("The level of the log to retrieve. Defaults to DEBUG."),
-            date: z.string()
-                .optional()
-                .describe(`The date of the log file to retrieve. If not provided, defaults to today. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z'`),
-            tail: z.number()
-                .optional()
-                .default(500)
-                .describe("The number of lines to retrieve from the end of the log file. Defaults to 500."),
+            description: `Retrieves Sitecore logs from the log directory.`,
+            inputSchema: {
+                name: z.string()
+                    // Restrict to a safe filename charset: this value is interpolated into a
+                    // PowerShell path glob (alongside the $SitecoreDataFolder variable), so it
+                    // cannot be single-quoted. Disallowing shell metacharacters prevents injection.
+                    .regex(/^[A-Za-z0-9._*-]*$/, "name may only contain letters, digits, '.', '_', '-' and '*'")
+                    .optional()
+                    .default("log")
+                    .describe(`The name of the log file to retrieve. If not provided, defaults to log.*. Possible options: ${logFilePrefixes.join(", ")}.`),
+                level: z.enum(Object.values(LogLevel) as [string, ...[string]])
+                    .optional()
+                    .default(LogLevel.DEBUG)
+                    .describe("The level of the log to retrieve. Defaults to DEBUG."),
+                date: z.string()
+                    .optional()
+                    .describe(`The date of the log file to retrieve. If not provided, defaults to today. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z'`),
+                tail: z.number()
+                    .optional()
+                    .default(500)
+                    .describe("The number of lines to retrieve from the end of the log file. Defaults to 500."),
+            },
         },
         async (params) => {
             const stringDate = formatDate(params.date);

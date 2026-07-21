@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function getArchiveItemPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-archive-item",
-        "Gets a list of items found in the specified archive.",
         {
-            archive: z.string()
-                .describe("The name of the archive to use when determining which items to process."),
-            database: z.string()
-                .describe("The database for which the archives should be retrieved."),
-            itemId: z.string().optional()
-                .describe("The ID for the original item that should be processed."),
-            identity: z.string().optional()
-                .describe("The user responsible for moving the item to the archive."),
+            description: "Gets a list of items found in the specified archive.",
+            inputSchema: {
+                archive: z.string()
+                    .describe("The name of the archive to use when determining which items to process."),
+                database: z.string()
+                    .describe("The database for which the archives should be retrieved."),
+                itemId: z.string().optional()
+                    .describe("The ID for the original item that should be processed."),
+                identity: z.string().optional()
+                    .describe("The user responsible for moving the item to the archive."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();

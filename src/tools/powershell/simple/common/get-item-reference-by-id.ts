@@ -5,18 +5,20 @@ import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemReferenceByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-reference-by-id",
-        "Gets item references for a Sitecore item by its ID, showing where it is used throughout the system.",
         {
-            id: z.string()
-                .describe("The ID of the item to retrieve references for"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)"),
-            language: z.string().optional()
-                .describe("The language of the item to check references for"),
-            version: z.string().optional()
-                .describe("The version of the item to check references for"),
+            description: "Gets item references for a Sitecore item by its ID, showing where it is used throughout the system.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to retrieve references for"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)"),
+                language: z.string().optional()
+                    .describe("The language of the item to check references for"),
+                version: z.string().optional()
+                    .describe("The version of the item to check references for"),
+            },
         },
         async (params) => {
             const command = `Get-ItemReference`;
