@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { runStoredQuery } from "../../logic/simple/run-stored-query.js";
 import { safeMcpResponse } from "@/helper.js";
 
-export function runStoredQueryTool(server: ToolServer, config: Config) {
+export function runStoredQueryTool(server: McpServer, config: Config) {
     server.tool(
         'item-service-run-stored-query',
         "Run a stored Sitecore query by its definition item ID.",

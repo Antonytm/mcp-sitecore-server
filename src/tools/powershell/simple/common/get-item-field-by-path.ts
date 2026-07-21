@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function getItemFieldByPathPowerShellTool(server: ToolServer, config: Config) {
+export function getItemFieldByPathPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-item-field-by-path",
         "Gets item fields as either names or fields or template fields by its path.",

@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { getItemById } from "../../logic/simple/get-item.js";
 import { safeMcpResponse } from "@/helper.js";
 
-export function getItemTool(server: ToolServer, config: Config) {
+export function getItemTool(server: McpServer, config: Config) {
     server.tool(
         'item-service-get-item',
         "Get a Sitecore item by its ID.",

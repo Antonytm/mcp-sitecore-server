@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,7 +6,7 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function setRenderingParameterByIdPowershellTool(server: ToolServer, config: Config) {
+export function setRenderingParameterByIdPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-set-rendering-parameter-by-id",
         "Adds and updates the specified rendering parameter from the rendering placed on the item specified by ID.",

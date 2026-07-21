@@ -1,9 +1,9 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function restartApplicationPowerShellTool(server: ToolServer, config: Config) {
+export function restartApplicationPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-restart-application",
         "Restarts the Sitecore Application pool.",

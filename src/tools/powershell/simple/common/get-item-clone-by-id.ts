@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getItemCloneByIdPowerShellTool(server: ToolServer, config: Config) {
+export function getItemCloneByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-item-clone-by-id",
         "Returns all the clones for the specified item by its ID.",

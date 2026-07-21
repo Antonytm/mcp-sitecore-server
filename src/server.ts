@@ -4,7 +4,6 @@ import fs from 'fs';
 import path from 'path';
 import { registerAll } from "./register.js";
 import { withInferredAnnotations } from "./tool-annotations.js";
-import type { ToolServer } from "./tool-server.js";
 
 
 
@@ -49,10 +48,7 @@ export async function getServer(config: Config): Promise<McpServer> {
             };
         }
     );
-
-    // The concrete McpServer only differs from ToolServer in the (deprecated) tool()
-    // overload we relax, so it is compatible at runtime; the cast bridges the two.
-    await registerAll(server as unknown as ToolServer, config);
+    await registerAll(server, config);
 
     return server;
 }

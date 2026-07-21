@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,7 +6,7 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function switchRenderingByPathPowershellTool(server: ToolServer, config: Config) {
+export function switchRenderingByPathPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-switch-rendering-by-path",
         "Switches an existing rendering specified by path with an alternate one for the item specified by path.",

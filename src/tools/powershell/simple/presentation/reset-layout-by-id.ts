@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function resetLayoutByIdPowershellTool(server: ToolServer, config: Config) {
+export function resetLayoutByIdPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-reset-layout-by-id",
         "Resets the layout of an item by Id.",

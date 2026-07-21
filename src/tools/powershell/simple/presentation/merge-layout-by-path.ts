@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function mergeLayoutByPathPowershellTool(server: ToolServer, config: Config) {
+export function mergeLayoutByPathPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-merge-layout-by-path",
         "Merges final and shared layouts by item path.",

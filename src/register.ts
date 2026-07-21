@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "./config.js";
 
 import { registerGraphQL } from "./tools/graphql/register-graphql.js";
@@ -144,15 +144,15 @@ import { setRenderingParameterByPathPowershellTool } from "./tools/powershell/co
 import { getLogsPowerShellTool } from "./tools/powershell/composite/logging/get-logs.js";
 import { getSitecoreCliDocumentation } from "./tools/sitecore-cli/get-sitecore-cli-documentation.js";
 
-export async function register(array: Array<(server: ToolServer, config: Config) => void>,
-    server: ToolServer,
+export async function register(array: Array<(server: McpServer, config: Config) => void>,
+    server: McpServer,
     config: Config) {
     for (const register of array) {
         await register(server, config);
     }
 }
 
-export async function registerAll(server: ToolServer, config: Config) {
+export async function registerAll(server: McpServer, config: Config) {
     await register([
         registerGraphQL,        
         //Item Service

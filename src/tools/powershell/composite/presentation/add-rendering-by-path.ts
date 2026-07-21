@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,7 +6,7 @@ import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
 
-export function addRenderingByPathPowershellTool(server: ToolServer, config: Config) {
+export function addRenderingByPathPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-add-rendering-by-path",
         "Adds a rendering to presentation of an item specified by path.",

@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { quotePowerShellString } from "../../command-builder.js";
 
-export function setLayoutIdPowershellTool(server: ToolServer, config: Config) {
+export function setLayoutIdPowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-set-layout-by-id",
         "Sets layout for an item specified by Id.",

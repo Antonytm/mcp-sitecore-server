@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getItemReferenceByIdPowerShellTool(server: ToolServer, config: Config) {
+export function getItemReferenceByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-item-reference-by-id",
         "Gets item references for a Sitecore item by its ID, showing where it is used throughout the system.",

@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { quotePowerShellString } from "../../command-builder.js";
 
-export function initializeSearchIndexingItemByIdPowerShellTool(server: ToolServer, config: Config) {
+export function initializeSearchIndexingItemByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "indexing-initialize-search-index-item-by-id",
         "Rebuilds the index for a given tree with the specified root item by id and index name. Supports wildcard filtering for the index name.",

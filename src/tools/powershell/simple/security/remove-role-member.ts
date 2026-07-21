@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function removeRoleMemberPowerShellTool(server: ToolServer, config: Config) {
+export function removeRoleMemberPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "security-remove-role-member",
         "Removes members from a Sitecore role.",

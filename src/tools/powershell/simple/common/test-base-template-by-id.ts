@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function testBaseTemplateByIdPowerShellTool(server: ToolServer, config: Config) {
+export function testBaseTemplateByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-test-base-template-by-id",
         "Checks if the item inherits from the specified template by its ID.",

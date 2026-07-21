@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
-export function getArchivePowerShellTool(server: ToolServer, config: Config) {
+export function getArchivePowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-archive",
         "Gets Sitecore database archives.",

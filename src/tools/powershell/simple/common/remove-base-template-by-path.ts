@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function removeBaseTemplateByPathPowerShellTool(server: ToolServer, config: Config) {
+export function removeBaseTemplateByPathPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-remove-base-template-by-path",
         "Removes a base template from a template item by its path.",

@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function testAccountPowerShellTool(server: ToolServer, config: Config) {
+export function testAccountPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "security-test-account",
         "Tests if a Sitecore user exists and has specific properties.",

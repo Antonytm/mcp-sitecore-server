@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getItemTemplateByPathPowerShellTool(server: ToolServer, config: Config) {
+export function getItemTemplateByPathPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-item-template-by-path",
         "Gets template information for a Sitecore item by its path.",

@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { safeMcpResponse } from "@/helper.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
-export function getPowershellDocumentationTool(server: ToolServer) {
+export function getPowershellDocumentationTool(server: McpServer) {
     server.tool(
         "get-powershell-documentation",
         "Gets the documentation describing all Sitecore Powershell commands.",

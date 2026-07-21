@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
-export function updateItemReferrerByIdPowerShellTool(server: ToolServer, config: Config) {
+export function updateItemReferrerByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-update-item-referrer-by-id",
         "Updates all references to the specified item (by its ID) to point to a new provided in the -NewTarget or removes links to the item.",

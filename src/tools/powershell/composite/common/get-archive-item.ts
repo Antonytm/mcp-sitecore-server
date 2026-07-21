@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
-export function getArchiveItemPowerShellTool(server: ToolServer, config: Config) {
+export function getArchiveItemPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-archive-item",
         "Gets a list of items found in the specified archive.",

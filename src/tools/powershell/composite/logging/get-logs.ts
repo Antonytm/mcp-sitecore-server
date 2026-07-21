@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -32,7 +32,7 @@ function formatDate(date?: string): string {
     return [year, month, day].join("");
 }
 
-export function getLogsPowerShellTool(server: ToolServer, config: Config) {
+export function getLogsPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         `logging-get-logs`,
         `Retrieves Sitecore logs from the log directory.`,

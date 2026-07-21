@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getLayoutDevicePowershellTool(server: ToolServer, config: Config) {
+export function getLayoutDevicePowershellTool(server: McpServer, config: Config) {
     server.tool(
         "presentation-get-layout-device",
         "Gets the layout for the device specified.",

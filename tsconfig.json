@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/tsconfig",  "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -16,9 +16,8 @@
     "incremental": false,
     "sourceMap": true,
     "declaration": true,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["./src/**/*"],

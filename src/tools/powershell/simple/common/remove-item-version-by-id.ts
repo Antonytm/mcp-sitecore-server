@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
-export function removeItemVersionByIdPowerShellTool(server: ToolServer, config: Config) {
+export function removeItemVersionByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-remove-item-version-by-id",
         "Removes a version of a Sitecore item by ID.",

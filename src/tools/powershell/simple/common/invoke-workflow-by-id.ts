@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function invokeWorkflowByIdPowerShellTool(server: ToolServer, config: Config) {
+export function invokeWorkflowByIdPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-invoke-workflow-by-id",
         "Executes workflow action for a Sitecore item by its ID.",

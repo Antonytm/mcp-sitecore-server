@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getItemWorkflowEventByPathPowerShellTool(server: ToolServer, config: Config) {
+export function getItemWorkflowEventByPathPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-item-workflow-event-by-path",
         "Gets entries from the workflow history for the specified item by its path.",

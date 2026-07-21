@@ -1,9 +1,9 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
-export function getSitecoreJobPowerShellTool(server: ToolServer, config: Config) {
+export function getSitecoreJobPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "common-get-sitecore-job",
         "Gets list of the current Sitecore jobs.",

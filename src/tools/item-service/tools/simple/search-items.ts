@@ -1,10 +1,10 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { searchItems } from "../../logic/simple/search-items.js";
 import { safeMcpResponse } from "@/helper.js";
 
-export function searchItemsTool(server: ToolServer, config: Config) {
+export function searchItemsTool(server: McpServer, config: Config) {
     server.tool(
         'item-service-search-items',
         "Search Sitecore items using the ItemService RESTful API.",

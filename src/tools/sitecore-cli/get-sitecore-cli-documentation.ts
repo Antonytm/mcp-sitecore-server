@@ -1,4 +1,4 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { safeMcpResponse } from "@/helper.js";
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
@@ -6,7 +6,7 @@ import path from "node:path";
 import fs from "node:fs";
 import { fileURLToPath } from "node:url";
 
-export function getSitecoreCliDocumentation(server: ToolServer, config: Config) {
+export function getSitecoreCliDocumentation(server: McpServer, config: Config) {
     server.tool(
         "sitecore-cli-documentation",
         "Gets Sitecore CLI documentation describing the most often used commands like index rebuild, item serialization, etc.",

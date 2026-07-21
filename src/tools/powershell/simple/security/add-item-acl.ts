@@ -1,11 +1,11 @@
-import type { ToolServer } from "@/tool-server.js";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 import { AccessRights } from "./access-rights.js";
 
-export function addItemAclPowerShellTool(server: ToolServer, config: Config) {
+export function addItemAclPowerShellTool(server: McpServer, config: Config) {
     server.tool(
         "security-add-item-acl-by-id",
         "Adds an access control entry to a Sitecore item by its ID.",
