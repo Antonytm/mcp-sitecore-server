@@ -1,7 +1,7 @@
 {
   "name": "@antonytm/mcp-sitecore-server",
   "mcpName": "io.github.Antonytm/mcp-sitecore-server",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "A Model Context Protocol server for Sitecore",
   "license": "Apache-2.0",
   "repository": {
