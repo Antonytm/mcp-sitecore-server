@@ -7,7 +7,30 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+      - name: Ensure Docker daemon is running
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          Get-Service docker | Format-Table -AutoSize
+          if ((Get-Service docker).Status -ne 'Running') {
+            Write-Host 'Starting docker service...'
+            Start-Service docker
+          }
+          # Wait for the daemon to accept API calls (named pipe becomes available).
+          $maxAttempts = 30
+          for ($i = 1; $i -le $maxAttempts; $i++) {
+            docker version *> $null
+            if ($LASTEXITCODE -eq 0) {
+              Write-Host 'Docker daemon is ready.'
+              break
+            }
+            Write-Host "Waiting for Docker daemon... ($i/$maxAttempts)"
+            Start-Sleep -Seconds 5
+          }
+          if ($LASTEXITCODE -ne 0) {
+            throw 'Docker daemon did not become ready in time.'
+          }
       - uses: mr-smithers-excellent/docker-build-push@v6
         name: Build & push Docker image
         with:
