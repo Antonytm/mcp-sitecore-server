@@ -1,13 +1,14 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getAllDomainsPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-get-domain",
-        "Get all Sitecore domains.",
-        {},
+        {
+            description: "Get all Sitecore domains.",
+        },
         async () => {
             const command = `Get-Domain`;
             const options: Record<string, any> = {};

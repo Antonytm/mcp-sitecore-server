@@ -56,7 +56,7 @@ export const envSchema = z.object({
     POWERSHELL_USERNAME: z.string().optional(),
     POWERSHELL_PASSWORD: z.string().optional(),
     POWERSHELL_SERVER_URL: z.string().url().optional(),
-    AUTORIZATION_HEADER: z.string().optional(),
+    AUTHORIZATION_HEADER: z.string().optional(),
 });
 
 export const envStartSchema = z.object({
@@ -104,7 +104,7 @@ const config: Config = {
         password: ENV.POWERSHELL_PASSWORD || "b",
         serverUrl: ENV.POWERSHELL_SERVER_URL || "https://xmcloudcm.localhost/",
     },
-    authorizationHeader: ENV.AUTORIZATION_HEADER || "",
+    authorizationHeader: ENV.AUTHORIZATION_HEADER || "",
 };
 
 export { config };

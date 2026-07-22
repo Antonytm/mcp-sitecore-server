@@ -1,22 +1,24 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemReferrerByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-referrer-by-path",
-        "Gets items referring to a Sitecore item by its path, showing which items reference it.",
         {
-            path: z.string()
-                .describe("The path of the item to retrieve referrers for (e.g. /sitecore/content/Home)"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)"),
-            language: z.string().optional()
-                .describe("The language of the item to check referrers for"),
-            version: z.string().optional()
-                .describe("The version of the item to check referrers for"),
+            description: "Gets items referring to a Sitecore item by its path, showing which items reference it.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to retrieve referrers for (e.g. /sitecore/content/Home)"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)"),
+                language: z.string().optional()
+                    .describe("The language of the item to check referrers for"),
+                version: z.string().optional()
+                    .describe("The version of the item to check referrers for"),
+            },
         },
         async (params) => {
             const command = `Get-ItemReferrer`;

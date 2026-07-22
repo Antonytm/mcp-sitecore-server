@@ -1,25 +1,28 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue } from "../../utils.js";
+import { renderingLookupGuard, renderingNotFoundMessage } from "./rendering-guard.js";
 
 export function setRenderingParameterByIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-set-rendering-parameter-by-id",
-        "Adds and updates the specified rendering parameter from the rendering placed on the item specified by ID.",
         {
-            itemId: z.string().describe("The ID of the item holding the rendering."),
-            renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
-            parameter: z.record(z.string(), z.string()).describe("The rendering parameter to add or update."),
-            database: z.string().describe("The context database.").optional().default("master"),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The item language varsion.").optional(),
+            description: "Adds and updates the specified rendering parameter from the rendering placed on the item specified by ID.",
+            inputSchema: {
+                itemId: z.string().describe("The ID of the item holding the rendering."),
+                renderingUniqueId: z.string().describe("The unique ID of the rendering holding the rendering parameter."),
+                parameter: z.record(z.string(), z.string()).describe("The rendering parameter to add or update."),
+                database: z.string().describe("The context database.").optional().default("master"),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies layout holding the rendering parameter. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The item language varsion.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();
@@ -40,8 +43,14 @@ export function setRenderingParameterByIdPowershellTool(server: McpServer, confi
             setRenderingParameters["FinalLayout"] = getSwitchParameterValue(params.finalLayout);
             setRenderingParameters["Language"] = params.language;
             
+            const notFound = renderingNotFoundMessage(
+                `a rendering with unique ID '${params.renderingUniqueId}' on the item with ID '${params.itemId}' in database '${params.database}'`,
+                "presentation-get-rendering-by-id"
+            );
+
             const command = `
                 $rendering = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)};
+                ${renderingLookupGuard("$rendering", notFound)}
                 Set-RenderingParameter -Instance $rendering ${commandBuilder.buildParametersString(setRenderingParameterParameters)} |
                     Set-Rendering ${commandBuilder.buildParametersString(setRenderingParameters)}
             `;

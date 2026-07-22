@@ -1,4 +1,4 @@
-import { generateUUID } from "@/utils.js";
+import { generateUUID, fetchWithTimeout } from "@/utils.js";
 import { convertObject, parseXMLString } from "@antonytm/clixml-parser";
 import { PowershellCommandBuilder } from "./command-builder.js";
 
@@ -30,12 +30,16 @@ class PowershellClient {
 
         const scriptWithParameters = this.commandBuilder.buildCommandString(script, parameters);
         const body = `${scriptWithParameters}\r\n <#${uuid}#>\r\n`;
-        const response = await fetch(url, {
+        // Default to 60s: most AI agents abort a tool call at ~60s anyway, so a longer
+        // default would just let the agent time out before we do. Still independently
+        // configurable via POWERSHELL_TIMEOUT_MS for long-running scripts (rebuilds,
+        // publishing) when the calling agent's timeout is raised to match.
+        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 60000;
+        const response = await fetchWithTimeout(url, {
             method: 'POST',
             headers: headers,
             body: body,
-
-        });
+        }, timeoutMs);
 
         if (!response.ok) {
             throw new Error(`Error executing script: ${response.statusText}`);

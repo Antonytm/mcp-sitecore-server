@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,13 +6,15 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function resetLayoutByIdPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-reset-layout-by-id",
-        "Resets the layout of an item by Id.",
         {
-            id: z.string().describe("The ID of the item to reset the layout for."),
-            finalLayout: z.boolean().describe("Specifies layout to be reset. If 'true', the final layout is reset, otherwise - shared layout.").optional(),
-            language: z.string().describe("Specifies the item language to reset layout for.").optional(),
+            description: "Resets the layout of an item by Id.",
+            inputSchema: {
+                id: z.string().describe("The ID of the item to reset the layout for."),
+                finalLayout: z.boolean().describe("Specifies layout to be reset. If 'true', the final layout is reset, otherwise - shared layout.").optional(),
+                language: z.string().describe("Specifies the item language to reset layout for.").optional(),
+            },
         },
         async (params) => {
             const command = `Reset-Layout`;

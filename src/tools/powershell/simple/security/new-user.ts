@@ -1,22 +1,24 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function newUserPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-new-user",
-        "Creates a new Sitecore user.",
         {
-            identity: z.string(),
-            password: z.string().optional(),
-            email: z.string().optional(),
-            fullName: z.string().optional(),
-            comment: z.string().optional(),
-            portrait: z.string().optional(),
-            enabled: z.boolean().optional(),
-            profileItemId: z.string().optional(),
+            description: "Creates a new Sitecore user.",
+            inputSchema: {
+                identity: z.string(),
+                password: z.string().optional(),
+                email: z.string().optional(),
+                fullName: z.string().optional(),
+                comment: z.string().optional(),
+                portrait: z.string().optional(),
+                enabled: z.boolean().optional(),
+                profileItemId: z.string().optional(),
+            },
         },
         async (params) => {
             const command = `New-User`;

@@ -1,23 +1,25 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function restoreArchiveItemPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-restore-archive-item",
-        "Restores items to the original database from the specified archive.",
         {
-            archive: z.string()
-                .describe("The name of the archive to use when determining which items to restore."),
-            database: z.string()
-                .describe("The database for which the archives should be retrieved."),
-            itemId: z.string().optional()
-                .describe("The ID for the original item that should be processed."),
-            identity: z.string().optional()
-                .describe("The user responsible for moving the item to the archive."),
+            description: "Restores items to the original database from the specified archive.",
+            inputSchema: {
+                archive: z.string()
+                    .describe("The name of the archive to use when determining which items to restore."),
+                database: z.string()
+                    .describe("The database for which the archives should be retrieved."),
+                itemId: z.string().optional()
+                    .describe("The ID for the original item that should be processed."),
+                identity: z.string().optional()
+                    .describe("The user responsible for moving the item to the archive."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();
@@ -32,8 +34,8 @@ export function restoreArchiveItemPowerShellTool(server: McpServer, config: Conf
             }
 
             const command = `
-                $database = Get-Database -Name ${params.database};
-                $archive = Get-Archive -Database $database -Name ${params.archive};
+                $database = Get-Database -Name ${quotePowerShellString(params.database)};
+                $archive = Get-Archive -Database $database -Name ${quotePowerShellString(params.archive)};
                 Restore-ArchiveItem ${commandBuilder.buildParametersString(parameters)} -Archive $archive;
             `;
 

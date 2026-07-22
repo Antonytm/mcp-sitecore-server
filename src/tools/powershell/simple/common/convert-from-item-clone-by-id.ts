@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,18 +6,20 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function convertFromItemCloneByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-convert-from-item-clone-by-id",
-        "Converts an item from a clone to a fully independent item by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to be analysed for clones presence."),
-            recurse: z.boolean().optional()
-                .describe("Converts the whole branch rather than a single item."),
-            passThru : z.boolean().optional()
-                .describe("Returns the item that was converted from a clone."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Converts an item from a clone to a fully independent item by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to be analysed for clones presence."),
+                recurse: z.boolean().optional()
+                    .describe("Converts the whole branch rather than a single item."),
+                passThru : z.boolean().optional()
+                    .describe("Returns the item that was converted from a clone."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

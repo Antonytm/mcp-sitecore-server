@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,20 +6,22 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { AccessRights } from "./access-rights.js";
 
 export function testItemAclPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-test-item-acl-by-id",
-        "Tests whether a user or role has specific access rights to a Sitecore item by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item to test access rights on"),
-            identity: z.string()
-                .describe("The identity of the user or role to test (e.g. 'sitecore\\admin')"),
-            accessRight: z.enum(AccessRights as [string, ...string[]])
-                .describe("The access right to test (e.g. 'item:read', 'item:write')"),
-            propType: z.enum(["Descendants", "Children", "Entity"]).optional()
-                .describe("The propagation type for the access right"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)")
+            description: "Tests whether a user or role has specific access rights to a Sitecore item by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item to test access rights on"),
+                identity: z.string()
+                    .describe("The identity of the user or role to test (e.g. 'sitecore\\admin')"),
+                accessRight: z.enum(AccessRights as [string, ...string[]])
+                    .describe("The access right to test (e.g. 'item:read', 'item:write')"),
+                propType: z.enum(["Descendants", "Children", "Entity"]).optional()
+                    .describe("The propagation type for the access right"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)")
+            },
         },
         async (params) => {
             const command = `Test-ItemAcl`;
@@ -41,20 +43,22 @@ export function testItemAclPowerShellTool(server: McpServer, config: Config) {
         }
     );
 
-    server.tool(
+    server.registerTool(
         "security-test-item-acl-by-path",
-        "Tests whether a user or role has specific access rights to a Sitecore item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to test access rights on (e.g. /sitecore/content/Home)"),
-            identity: z.string()
-                .describe("The identity of the user or role to test (e.g. 'sitecore\\admin')"),
-            accessRight: z.string()
-                .describe("The access right to test (e.g. 'item:read', 'item:write')"),
-            propType: z.enum(["Descendants", "Children", "Entity"]).optional()
-                .describe("The propagation type for the access right"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)")
+            description: "Tests whether a user or role has specific access rights to a Sitecore item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to test access rights on (e.g. /sitecore/content/Home)"),
+                identity: z.string()
+                    .describe("The identity of the user or role to test (e.g. 'sitecore\\admin')"),
+                accessRight: z.string()
+                    .describe("The access right to test (e.g. 'item:read', 'item:write')"),
+                propType: z.enum(["Descendants", "Children", "Entity"]).optional()
+                    .describe("The propagation type for the access right"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)")
+            },
         },
         async (params) => {
             const command = `Test-ItemAcl`;

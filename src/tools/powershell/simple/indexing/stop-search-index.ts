@@ -1,15 +1,17 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function stopSearchIndexPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "indexing-stop-search-index",
-        "Stop one or more Sitecore search indexes. If no name is provided, all running indexes will be stopped.",
         {
-            name: z.string().optional().describe("The name of the index to stop. If not provided, all running indexes will be stopped."),
+            description: "Stop one or more Sitecore search indexes. If no name is provided, all running indexes will be stopped.",
+            inputSchema: {
+                name: z.string().optional().describe("The name of the index to stop. If not provided, all running indexes will be stopped."),
+            },
         },
         async (params) => {
             const command = `Stop-SearchIndex`;

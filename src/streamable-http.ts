@@ -97,6 +97,13 @@ export function startStreamableHTTP() {
     // Handle DELETE requests for session termination
     app.delete('/mcp', handleSessionRequest);
 
+    // Lightweight liveness endpoint for container/orchestrator health checks. It only
+    // reports that the HTTP server is accepting requests (not MCP session state), which
+    // is the right signal for a Docker HEALTHCHECK.
+    app.get('/health', (_req, res) => {
+        res.status(200).json({ status: 'ok' });
+    });
+
     // RFC 9728 OAuth Protected Resource Metadata. Some MCP clients (e.g. Claude
     // Code) proactively probe this endpoint before sending the first MCP request
     // to decide whether the server is OAuth-protected. If the probe fails or

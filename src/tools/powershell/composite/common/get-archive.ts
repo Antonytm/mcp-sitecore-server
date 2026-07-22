@@ -1,19 +1,21 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
-import { PowershellCommandBuilder } from "../../command-builder.js";
+import { PowershellCommandBuilder, quotePowerShellString } from "../../command-builder.js";
 
 export function getArchivePowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-archive",
-        "Gets Sitecore database archives.",
         {
-            name: z.string().optional()
-                .describe("The name of the archive to retrieve."),
-            database: z.string().optional()
-                .describe("The database for which the archives should be retrieved."),
+            description: "Gets Sitecore database archives.",
+            inputSchema: {
+                name: z.string().optional()
+                    .describe("The name of the archive to retrieve."),
+                database: z.string().optional()
+                    .describe("The database for which the archives should be retrieved."),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();
@@ -24,7 +26,7 @@ export function getArchivePowerShellTool(server: McpServer, config: Config) {
             }
 
             const command = `
-                $database = Get-Database -Name ${params.database};
+                $database = Get-Database -Name ${quotePowerShellString(params.database)};
                 Get-Archive ${commandBuilder.buildParametersString(parameters)} -database $database;
             `;
 

@@ -1,20 +1,22 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function protectItemByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "security-protect-item-by-path",
-        "Protect a Sitecore item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to protect (e.g. /sitecore/content/Home)"),
-            passThru: z.boolean().optional()
-                .describe("If set to true, passes the processed object back to the pipeline"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)")
+            description: "Protect a Sitecore item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to protect (e.g. /sitecore/content/Home)"),
+                passThru: z.boolean().optional()
+                    .describe("If set to true, passes the processed object back to the pipeline"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)")
+            },
         },
         async (params) => {
             const command = `Protect-Item`;

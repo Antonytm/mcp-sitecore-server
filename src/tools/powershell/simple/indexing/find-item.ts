@@ -1,8 +1,9 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { PowershellClient } from "@/tools/powershell/client.js";
+import { quotePowerShellString } from "@/tools/powershell/command-builder.js";
 
 // The results of usage of this tool are not quite good.
 // Problems:
@@ -89,29 +90,31 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
     }
 
     //https://doc.sitecorepowershell.com/appendix/indexing/find-item
-    server.tool(
+    server.registerTool(
         "indexing-find-item",
-        "Finds items using the Sitecore Content Search API. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z').",
         {
-            index: z.string().optional()
-                .default("sitecore_master_index").describe("The name of the Sitecore index to search in. e.g., 'sitecore_master_index', 'sitecore_web_index'."),
-            //array of objects
-            criteria: z.array(
-                z.object({
-                    filter: z.enum(filterValues as [string, ...string[]]).describe("The type of filter to apply to the search criteria."),
-                    field: z.enum(
-                        [...allFieldsCommandResult] as [string, ...string[]]
-                    ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}`),
-                    value: z.string().describe("The value to search for."),
+            description: "Finds items using the Sitecore Content Search API. Date format should be in ISO 8601 format (e.g., '2023-10-01T00:00:00Z').",
+            inputSchema: {
+                index: z.string().optional()
+                    .default("sitecore_master_index").describe("The name of the Sitecore index to search in. e.g., 'sitecore_master_index', 'sitecore_web_index'."),
+                //array of objects
+                criteria: z.array(
+                    z.object({
+                        filter: z.enum(filterValues as [string, ...string[]]).describe("The type of filter to apply to the search criteria."),
+                        field: z.enum(
+                            [...allFieldsCommandResult] as [string, ...string[]]
+                        ).describe(`Index Field name found on the SearchResultItem such as the following: ${allFieldsCommandResult.join(", ")}`),
+                        value: z.string().describe("The value to search for."),
 
-                })
-            ),
-            first: z.number().optional().default(200).describe("The maximum number of results to return. Defaults to 200."),
-            skip: z.number().optional().default(0).describe("The number of results to skip. Defaults to 0."),
+                    })
+                ),
+                first: z.number().optional().default(200).describe("The maximum number of results to return. Defaults to 200."),
+                skip: z.number().optional().default(0).describe("The number of results to skip. Defaults to 0."),
+            },
         },
         async (params) => {
 
-            const criteria = params?.criteria?.map(c => {
+            const criteria = params?.criteria?.map((c: any) => {
                 // Depending on the field type and filter type, the criteria format may vary.
                 // Implemented only for DateTime fields and some common filters.
                 // Other fields should be implmented as needed.
@@ -126,7 +129,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                         else {
                             throw new Error(`Invalid date range format for field ${c.field}. Expected format is 'start_date | end_date'.`);
                         }
-                        const [startDate, endDate] = c.value.split(divider).map(date => date.trim());
+                        const [startDate, endDate] = c.value.split(divider).map((date: string) => date.trim());
                         if (!startDate || !endDate) {
                             throw new Error(`Invalid date range format for field ${c.field}. Expected format is 'start_date | end_date'.`);
                         }
@@ -141,7 +144,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                     return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = [datetime]"${c.value}"; }`;
                 }
 
-                return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = "${c.value}"; }`;
+                return `@{ Filter = "${c.filter}"; Field = "${c.field}"; Value = ${quotePowerShellString(c.value)}; }`;
             }).join(", ");
 
             let extraFields = "";
@@ -149,7 +152,7 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
                 extraFields += `, @{n="${c.field}"; e={$_.Fields["${c.field}"]}}`;
             });
 
-            const command = `Find-Item -Index "${params.index}" -Criteria @(${criteria}) -First ${params.first} -Skip ${params.skip} | Select-Object  @{n="Name"; e={$_.Name}}, @{n="Path"; e={$_.Path}},@{n="ItemId"; e={$_.ItemId.ToString()}}, @{n="TemplateId"; e={$_.TemplateId.ToString()}}, @{n="TemplateName"; e={$_.TemplateName}} ${extraFields}`;
+            const command = `Find-Item -Index ${quotePowerShellString(params.index)} -Criteria @(${criteria}) -First ${params.first} -Skip ${params.skip} | Select-Object  @{n="Name"; e={$_.Name}}, @{n="Path"; e={$_.Path}},@{n="ItemId"; e={$_.ItemId.ToString()}}, @{n="TemplateId"; e={$_.TemplateId.ToString()}}, @{n="TemplateName"; e={$_.TemplateName}} ${extraFields}`;
 
             return safeMcpResponse(client.executeScriptJson(command, {}).then(
                 (result: any) => {

@@ -1,20 +1,22 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function removeBaseTemplateByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-remove-base-template-by-path",
-        "Removes a base template from a template item by its path.",
         {
-            path: z.string()
-                .describe("The path of the item to remove the base template from."),
-            template: z.string()
-                .describe("The path representing the template item to remove as a base template."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Removes a base template from a template item by its path.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to remove the base template from."),
+                template: z.string()
+                    .describe("The path representing the template item to remove as a base template."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {

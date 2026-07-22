@@ -1,22 +1,24 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../generic.js";
 
 export function getItemReferenceByPathPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-get-item-reference-by-path",
-        "Gets item references for a Sitecore item by its path, showing where it is used throughout the system.",
         {
-            path: z.string()
-                .describe("The path of the item to retrieve references for (e.g. /sitecore/content/Home)"),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database)"),
-            language: z.string().optional()
-                .describe("The language of the item to check references for"),
-            version: z.string().optional()
-                .describe("The version of the item to check references for"),
+            description: "Gets item references for a Sitecore item by its path, showing where it is used throughout the system.",
+            inputSchema: {
+                path: z.string()
+                    .describe("The path of the item to retrieve references for (e.g. /sitecore/content/Home)"),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database)"),
+                language: z.string().optional()
+                    .describe("The language of the item to check references for"),
+                version: z.string().optional()
+                    .describe("The version of the item to check references for"),
+            },
         },
         async (params) => {
             const command = `Get-ItemReference`;

@@ -1,27 +1,30 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
 import { runGenericPowershellCommand } from "../../simple/generic.js";
 import { PowershellCommandBuilder } from "../../command-builder.js";
 import { getSwitchParameterValue, getNumberParameterValue } from "../../utils.js";
+import { renderingLookupGuard, renderingNotFoundMessage } from "./rendering-guard.js";
 
 export function setRenderingByPathPowershellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "presentation-set-rendering-by-path",
-        "Updates rendering specified by item path with new values.",
         {
-            itemPath: z.string().describe("The path of the item holding the rendering."),
-            uniqueId: z.string().describe("The unique ID of the rendering."),
-            placeholder: z.string().describe("New rendering placeholder value if specified.").optional(),
-            dataSource: z.string().describe("New rendering data source if specified.").optional(),
-            finalLayout: z
-                .boolean()
-                .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
-                .optional(),
-            language: z.string().describe("The language version of the item holding the rendering.").optional(),
-            index: z.number().describe("New index of the rendering in the layout.").optional(),
-            parameter: z.record(z.string(), z.string()).describe("New rendering parameters if specified.").optional(),
+            description: "Updates rendering specified by item path with new values.",
+            inputSchema: {
+                itemPath: z.string().describe("The path of the item holding the rendering."),
+                uniqueId: z.string().describe("The unique ID of the rendering."),
+                placeholder: z.string().describe("New rendering placeholder value if specified.").optional(),
+                dataSource: z.string().describe("New rendering data source if specified.").optional(),
+                finalLayout: z
+                    .boolean()
+                    .describe("Specifies the layout to update the rendering. If 'true', the final layout is used, otherwise - shared layout.")
+                    .optional(),
+                language: z.string().describe("The language version of the item holding the rendering.").optional(),
+                index: z.number().describe("New index of the rendering in the layout.").optional(),
+                parameter: z.record(z.string(), z.string()).describe("New rendering parameters if specified.").optional(),
+            },
         },
         async (params) => {
             const commandBuilder = new PowershellCommandBuilder();
@@ -39,8 +42,14 @@ export function setRenderingByPathPowershellTool(server: McpServer, config: Conf
             setRenderingParameters["Index"] = getNumberParameterValue(params.index);
             setRenderingParameters["Parameter"] = params.parameter;
             
+            const notFound = renderingNotFoundMessage(
+                `a rendering with unique ID '${params.uniqueId}' on the item at path '${params.itemPath}'`,
+                "presentation-get-rendering-by-path"
+            );
+
             const command = `
                 $rendering = Get-Rendering ${commandBuilder.buildParametersString(getRenderingParameters)};
+                ${renderingLookupGuard("$rendering", notFound)}
                 Set-Rendering -Instance $rendering ${commandBuilder.buildParametersString(setRenderingParameters)};
             `;
 

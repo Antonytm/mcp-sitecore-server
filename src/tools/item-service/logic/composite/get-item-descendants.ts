@@ -18,29 +18,48 @@ export async function getItemDescendants(conf: Config,
         conf.itemService.domain,
     );
 
-    const responseArray = [];
-    const idsSet = new Set<string>();
+    // Guard against runaway traversals: cap the total number of items collected and
+    // track visited IDs so a circular reference (or a pathologically large subtree)
+    // cannot exhaust memory or spin forever.
+    const maxItems = Number(process.env.DESCENDANTS_MAX_ITEMS) || 5000;
 
-    idsSet.add(id);
+    const responseArray: any[] = [];
+    const queue: string[] = [id];
+    const visited = new Set<string>([id]);
+    let truncated = false;
 
-    while(idsSet.size > 0) {
-        const idToProcess = idsSet.values().next().value ?? "";
-        idsSet.delete(idToProcess);
+    while (queue.length > 0) {
+        const idToProcess = queue.shift() ?? "";
         const children = await client.getItemChildren(idToProcess, options) as any;
-        
+
         if (children) {
             for (const child of children) {
-                idsSet.add(child.ItemID);
+                if (responseArray.length >= maxItems) {
+                    truncated = true;
+                    break;
+                }
+                responseArray.push(child);
+                if (child.ItemID && !visited.has(child.ItemID)) {
+                    visited.add(child.ItemID);
+                    queue.push(child.ItemID);
+                }
             }
-            responseArray.push(...children);
+        }
+
+        if (truncated) {
+            break;
         }
     }
+
+    const text = truncated
+        ? `${JSON.stringify(responseArray, null, 2)}\n\n[Result truncated at ${maxItems} items. Narrow the starting item or raise DESCENDANTS_MAX_ITEMS to retrieve more.]`
+        : JSON.stringify(responseArray, null, 2);
 
     return {
         content: [
             {
                 type: "text",
-                text: JSON.stringify(responseArray, null, 2),
+                text,
             },
         ],
         isError: false,

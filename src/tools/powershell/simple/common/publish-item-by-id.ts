@@ -1,4 +1,4 @@
-import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp";
+import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import type { Config } from "@/config.js";
 import { z } from "zod";
 import { safeMcpResponse } from "@/helper.js";
@@ -6,32 +6,34 @@ import { runGenericPowershellCommand } from "../generic.js";
 import { getSwitchParameterValue } from "../../utils.js";
 
 export function publishItemByIdPowerShellTool(server: McpServer, config: Config) {
-    server.tool(
+    server.registerTool(
         "common-publish-item-by-id",
-        "Publishes a Sitecore item by its ID.",
         {
-            id: z.string()
-                .describe("The ID of the item that should be published."),
-            target: z.string().optional()
-                .describe("Specifies the publishing target. The default target database is 'web'."),
-            recurse: z.boolean().optional()
-                .describe("Publishes the subitems with the root item."),
-            publishMode: z.enum(["Full", "Incremental", "SingleItem", "Smart"]).optional()
-                .describe("Specifies the Publish mode."),
-            publishRelatedItems: z.boolean().optional()
-                .describe("Publishes the related items."),
-            republishAll: z.boolean().optional()
-                .describe("Republishes all items provided to the publishing job."),
-            compareRevisions: z.boolean().optional()
-                .describe("Turns revision comparison on."),
-            fromDate: z.date().optional()
-                .describe("Publishes items newer than the date provided only."),
-            asJob : z.boolean().optional()
-                .describe("The Sitecore API called to perform the publish is different with this parameter."),
-            language: z.string().optional()
-                .describe("The language of the item that should be published. Supports globbing/wildcards."),
-            database: z.string().optional()
-                .describe("The database containing the item (defaults to the context database).")
+            description: "Publishes a Sitecore item by its ID.",
+            inputSchema: {
+                id: z.string()
+                    .describe("The ID of the item that should be published."),
+                target: z.string().optional()
+                    .describe("Specifies the publishing target. The default target database is 'web'."),
+                recurse: z.boolean().optional()
+                    .describe("Publishes the subitems with the root item."),
+                publishMode: z.enum(["Full", "Incremental", "SingleItem", "Smart"]).optional()
+                    .describe("Specifies the Publish mode."),
+                publishRelatedItems: z.boolean().optional()
+                    .describe("Publishes the related items."),
+                republishAll: z.boolean().optional()
+                    .describe("Republishes all items provided to the publishing job."),
+                compareRevisions: z.boolean().optional()
+                    .describe("Turns revision comparison on."),
+                fromDate: z.date().optional()
+                    .describe("Publishes items newer than the date provided only."),
+                asJob : z.boolean().optional()
+                    .describe("The Sitecore API called to perform the publish is different with this parameter."),
+                language: z.string().optional()
+                    .describe("The language of the item that should be published. Supports globbing/wildcards."),
+                database: z.string().optional()
+                    .describe("The database containing the item (defaults to the context database).")
+            },
         },
         async (params) => {
             const options: Record<string, any> = {
