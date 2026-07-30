@@ -30,11 +30,15 @@ class PowershellClient {
 
         const scriptWithParameters = this.commandBuilder.buildCommandString(script, parameters);
         const body = `${scriptWithParameters}\r\n <#${uuid}#>\r\n`;
-        // Default to 60s: most AI agents abort a tool call at ~60s anyway, so a longer
-        // default would just let the agent time out before we do. Still independently
-        // configurable via POWERSHELL_TIMEOUT_MS for long-running scripts (rebuilds,
-        // publishing) when the calling agent's timeout is raised to match.
-        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 60000;
+        // Default to 10 minutes. The previous 60s default was tuned to the tool-call
+        // timeout most AI agents enforce, but in practice it fired constantly on larger
+        // scripts (index rebuilds, publishing, bulk item updates) and aborted work that
+        // would have succeeded. A generous default is the safer failure mode here: this
+        // timeout exists to stop a hung Sitecore endpoint holding the connection open
+        // forever, not to bound legitimate script runtime — and the calling agent's own
+        // timeout still cuts things short first if it is set lower. Override with
+        // POWERSHELL_TIMEOUT_MS to raise or lower it.
+        const timeoutMs = Number(process.env.POWERSHELL_TIMEOUT_MS) || 600000;
         const response = await fetchWithTimeout(url, {
             method: 'POST',
             headers: headers,

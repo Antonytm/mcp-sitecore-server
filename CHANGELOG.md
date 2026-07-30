@@ -41,10 +41,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   tool's name, so MCP clients can distinguish safe reads from mutations and destructive
   operations. `run-powershell-script` is flagged destructive and open-world.
 - **Request timeouts** on all outbound HTTP calls via a shared `fetchWithTimeout` helper
-  (Item Service, GraphQL, and PowerShell clients). Defaults: 30s for REST/GraphQL, 60s
-  for PowerShell; both configurable via `REQUEST_TIMEOUT_MS` / `POWERSHELL_TIMEOUT_MS`.
-  (60s aligns with the tool-call timeout most AI agents enforce, so a longer default would
-  only cause the agent to abort before this timeout fires.)
+  (Item Service, GraphQL, and PowerShell clients). Defaults: 30s for REST/GraphQL, 10
+  minutes for PowerShell; both configurable via `REQUEST_TIMEOUT_MS` /
+  `POWERSHELL_TIMEOUT_MS`. (The PowerShell default is deliberately generous — long-running
+  scripts such as index rebuilds and publishing routinely exceed a short timeout, and the
+  calling agent's own tool-call timeout will cut things short first if it is lower.)
 - **Traversal guard** in `get-item-descendants`: a visited-set for cycle protection and a
   configurable node cap (`DESCENDANTS_MAX_ITEMS`, default 5000) that reports truncation
   instead of exhausting memory on large or circular item trees.
