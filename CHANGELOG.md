@@ -5,7 +5,28 @@ All notable changes to this project are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.4.2] - 2026-07-30
+
+### Changed
+
+- **Default PowerShell script timeout raised from 60 seconds to 10 minutes.** The 60s
+  default was tuned to the tool-call timeout most AI agents enforce, but in practice it
+  fired constantly on larger scripts (index rebuilds, publishing, bulk item updates) and
+  aborted work that would have succeeded. The timeout exists to stop a hung Sitecore
+  endpoint holding a connection open forever, not to bound legitimate script runtime, so a
+  generous default is the safer failure mode — and the calling agent's own tool-call
+  timeout still cuts things short first when it is set lower. Override with
+  `POWERSHELL_TIMEOUT_MS`.
+
+## [1.4.1] - 2026-07-22
+
+### Fixed
+
+- Docker Hub publish workflows only: the Windows image build now waits for the Docker
+  daemon to accept API calls before building, and the published image tags were brought up
+  to the current version. No changes to the server itself.
+
+## [1.4.0] - 2026-07-22
 
 ### Security
 
@@ -44,7 +65,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   (Item Service, GraphQL, and PowerShell clients). Defaults: 30s for REST/GraphQL, 60s
   for PowerShell; both configurable via `REQUEST_TIMEOUT_MS` / `POWERSHELL_TIMEOUT_MS`.
   (60s aligns with the tool-call timeout most AI agents enforce, so a longer default would
-  only cause the agent to abort before this timeout fires.)
+  only cause the agent to abort before this timeout fires.) The PowerShell default was
+  later raised to 10 minutes in 1.4.2.
 - **Traversal guard** in `get-item-descendants`: a visited-set for cycle protection and a
   configurable node cap (`DESCENDANTS_MAX_ITEMS`, default 5000) that reports truncation
   instead of exhausting memory on large or circular item trees.

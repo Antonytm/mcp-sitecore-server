@@ -35,7 +35,7 @@ jobs:
         name: Build & push Docker image
         with:
           image: antonytm/mcp-sitecore-windows
-          tags: 1.4.1, latest
+          tags: 1.4.2, latest
           registry: docker.io
           dockerfile: ./docker/windows/Dockerfile
           platform: windows/amd64
