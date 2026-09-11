@@ -40,7 +40,8 @@ export async function runGenericPowershellCommand(
         config.powershell.serverUrl,
         config.powershell.username,
         config.powershell.password,
-        config.powershell.domain
+        config.powershell.domain,
+        { site: config.powershell.siteContext, database: config.powershell.contextDatabase }
     );
 
     // A projection must be the last stage of the pipeline, so when one is supplied the

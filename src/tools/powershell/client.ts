@@ -1,6 +1,6 @@
 import { generateUUID, fetchWithTimeout } from "@/utils.js";
 import { convertObject, parseXMLString } from "@antonytm/clixml-parser";
-import { PowershellCommandBuilder } from "./command-builder.js";
+import { PowershellCommandBuilder, wrapInScriptContext, DEFAULT_SCRIPT_CONTEXT, type ScriptContext } from "./command-builder.js";
 
 /**
  * Turns a failed SPE response into a message that says what actually answered.
@@ -76,12 +76,25 @@ class PowershellClient {
     private domain: string;
     private bearertoken: string | null = null;
     private commandBuilder: PowershellCommandBuilder = new PowershellCommandBuilder();
+    private context: ScriptContext;
 
-    constructor(serverUrl: string, username: string, password: string, domain: string = 'sitecore') {
+    /**
+     * `context` is the site (and content database) every script runs under — see
+     * `wrapInScriptContext` for why the default is `shell` / `master` rather than whatever
+     * site the request host resolves to. Pass `{ site: "" }` to run scripts unwrapped.
+     */
+    constructor(
+        serverUrl: string,
+        username: string,
+        password: string,
+        domain: string = 'sitecore',
+        context: ScriptContext = DEFAULT_SCRIPT_CONTEXT
+    ) {
         this.serverUrl = serverUrl;
         this.username = username;
         this.password = password;
         this.domain = domain;
+        this.context = context;
         this.bearertoken = "Basic " + Buffer.from(`${username}:${password}`).toString("base64");
     }
 
@@ -96,7 +109,9 @@ class PowershellClient {
         };
 
         const scriptWithParameters = this.commandBuilder.buildCommandString(script, parameters);
-        const body = `${scriptWithParameters}\r\n <#${uuid}#>\r\n`;
+        // The site/database switch wraps the whole script, so a create inside it gets the
+        // template's default workflow the way it would from the Content Editor.
+        const body = `${wrapInScriptContext(scriptWithParameters, this.context)}\r\n <#${uuid}#>\r\n`;
         // Default to 10 minutes. The previous 60s default was tuned to the tool-call
         // timeout most AI agents enforce, but in practice it fired constantly on larger
         // scripts (index rebuilds, publishing, bulk item updates) and aborted work that

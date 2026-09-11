@@ -37,11 +37,23 @@ const ConfigSchema = z.object({
         username: z.string(),
         password: z.string(),
         serverUrl: z.string().url(),
+        /**
+         * The site every script runs under, via a `SiteContextSwitcher` around the script body.
+         * Sitecore applies a template's default workflow at create time only where
+         * `Context.Site.EnableWorkflow` is true; the remoting endpoint otherwise resolves its
+         * site from the request host, which on a multi-site CM is a content site with workflow
+         * off. `shell` is what the Content Editor and the SPE ISE run as. Empty = no switch.
+         */
+        siteContext: z.string(),
+        /** `Context.Database` inside that switch; `shell` alone would make it `core`. Empty = leave it. */
+        contextDatabase: z.string(),
     }).default({
         domain: "sitecore",
         username: "admin",
         password: "b",
         serverUrl: "https://xmcloudcm.localhost/",
+        siteContext: "shell",
+        contextDatabase: "master",
     }),
     /**
      * The Authoring and Management GraphQL API: one endpoint on the CM that serves the
@@ -86,6 +98,8 @@ export const envSchema = z.object({
     POWERSHELL_USERNAME: z.string().optional(),
     POWERSHELL_PASSWORD: z.string().optional(),
     POWERSHELL_SERVER_URL: z.string().url().optional(),
+    POWERSHELL_SITE_CONTEXT: z.string().optional(),
+    POWERSHELL_CONTEXT_DATABASE: z.string().optional(),
     AUTHORING_ENDPOINT: z.string().url().optional(),
     AUTHORING_TOKEN: z.string().optional(),
     AUTHORING_CLIENT_ID: z.string().optional(),
@@ -203,6 +217,9 @@ const config: Config = {
         username: ENV.POWERSHELL_USERNAME || "admin",
         password: ENV.POWERSHELL_PASSWORD || "b",
         serverUrl: ENV.POWERSHELL_SERVER_URL || "https://xmcloudcm.localhost/",
+        // `??`, not `||`: an explicitly empty value is the documented way to turn the switch off.
+        siteContext: ENV.POWERSHELL_SITE_CONTEXT ?? "shell",
+        contextDatabase: ENV.POWERSHELL_CONTEXT_DATABASE ?? "master",
     },
     authoring: {
         endpoint: resolveAuthoringEndpoint(ENV.AUTHORING_ENDPOINT, itemServiceServerUrl),

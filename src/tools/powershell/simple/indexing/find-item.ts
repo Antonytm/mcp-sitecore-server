@@ -116,7 +116,8 @@ export async function findItemPowerShellTool(server: McpServer, config: Config) 
         config.powershell.serverUrl,
         config.powershell.username,
         config.powershell.password,
-        config.powershell.domain
+        config.powershell.domain,
+        { site: config.powershell.siteContext, database: config.powershell.contextDatabase }
     );
 
     //https://doc.sitecorepowershell.com/appendix/indexing/find-item

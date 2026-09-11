@@ -68,6 +68,19 @@ client's URL to `http://<host>:3001/mcp` and its transport type to "Streamable H
 | `POWERSHELL_DOMAIN`       | `sitecore` | The domain for PowerShell Remoting API authentication.            |
 | `POWERSHELL_USERNAME`     | —          | The username for PowerShell Remoting API authentication.          |
 | `POWERSHELL_PASSWORD`     | —          | The password for PowerShell Remoting API authentication.          |
+| `POWERSHELL_SITE_CONTEXT` | `shell`    | The Sitecore site every script runs under (a `SiteContextSwitcher` around the script body). `shell` is what the Content Editor and the SPE ISE use, and it is the context in which a template's default workflow is applied to a created item. Set it to an empty value to run scripts under whichever site the request host resolves to, which on a multi-site CM is a content site with workflow off — see the note below. |
+| `POWERSHELL_CONTEXT_DATABASE` | `master` | `Context.Database` inside that switch. `shell` alone would make it `core`, the shell site's own database. Empty leaves the site's database in place. |
+
+**Why scripts run as `shell`.** Sitecore applies a template's `__Default workflow` to a created item only
+when `Context.Site.EnableWorkflow` is true. The Content Editor, Pages and the SPE ISE run as `shell`, where
+it is. The remoting endpoint resolves its site from the request host like any other request, which on a CM
+serving several sites is whichever content site claims that hostname, with workflow off — so a script that
+created pages there left every one of them outside its workflow, and nothing reported it. Every script is
+therefore wrapped in a `SiteContextSwitcher` (plus a `DatabaseSwitcher`, because `shell` on its own makes
+`Context.Database` the `core` database). A `try` block opens no scope in PowerShell, so the script's
+variables, output and `return` are unaffected; the one visible difference is that `[Sitecore.Context]::Site.Name`
+reads `shell`. Passing `sc_site=shell` on the query string instead does not work: the shell site redirects an
+unauthenticated request to its login page before SPE's basic-auth handler runs.
 
 ## Authoring and Management API
 

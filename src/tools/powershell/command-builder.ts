@@ -11,6 +11,60 @@ export function quotePowerShellString(value: unknown): string {
     return `'${String(value).replace(/'/g, "''")}'`;
 }
 
+/** The site and content database a script runs under. Empty `site` means "do not switch". */
+export type ScriptContext = {
+    site?: string;
+    database?: string;
+};
+
+export const DEFAULT_SCRIPT_CONTEXT: Required<ScriptContext> = { site: "shell", database: "master" };
+
+/**
+ * Wraps a script so it runs in a named site context, with `Context.Database` pinned.
+ *
+ * Why this exists: Sitecore applies a template's `__Default workflow` at create time — from a
+ * bare template or a branch alike — only when `Context.Site.EnableWorkflow` is true. The
+ * Content Editor, Pages and the SPE ISE all run in `shell`, where it is. The remoting endpoint
+ * this server calls resolves its site from the request host like any other request, which on
+ * a CM serving several sites is whichever content site claims the hostname (measured
+ * 2026-09-11: `Lifeline`, `EnableWorkflow=False`). A script that created pages there left every
+ * one of them outside its workflow, silently, and nothing downstream noticed for a week.
+ *
+ * `sc_site=shell` on the query string is not an alternative: the shell site demands an
+ * interactive login, so the request is redirected before SPE's basic-auth handler runs.
+ *
+ * Switching to `shell` alone also flips `Context.Database` to `core` (the shell site's own
+ * database), so the content database is pinned too, which is the shape the ISE presents.
+ *
+ * A `try` block opens no new scope in PowerShell, so the caller's variables, output stream and
+ * `return` behave exactly as they did unwrapped. Both names are emitted as single-quoted
+ * literals, so a value from configuration cannot break out of the string.
+ */
+export function wrapInScriptContext(script: string, context: ScriptContext = DEFAULT_SCRIPT_CONTEXT): string {
+    const site = (context.site ?? "").trim();
+    if (site === "") {
+        return script;
+    }
+    const database = (context.database ?? "").trim();
+    const siteLiteral = quotePowerShellString(site);
+    const lines = [
+        `$__mcpSite = [Sitecore.Configuration.Factory]::GetSite(${siteLiteral})`,
+        `if ($null -eq $__mcpSite) { throw ("POWERSHELL_SITE_CONTEXT names no configured site: " + ${siteLiteral}) }`,
+        `$__mcpSiteSwitcher = New-Object Sitecore.Sites.SiteContextSwitcher($__mcpSite)`,
+    ];
+    if (database !== "") {
+        lines.push(
+            `$__mcpDbSwitcher = New-Object Sitecore.Data.DatabaseSwitcher([Sitecore.Configuration.Factory]::GetDatabase(${quotePowerShellString(database)}))`
+        );
+    }
+    lines.push("try {", script, "} finally {");
+    if (database !== "") {
+        lines.push("    $__mcpDbSwitcher.Dispose()");
+    }
+    lines.push("    $__mcpSiteSwitcher.Dispose()", "}");
+    return lines.join("\r\n");
+}
+
 export class PowershellCommandBuilder
 {
     buildCommandString(script: string, parameters: Record<string, any> = {}): string {

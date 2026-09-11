@@ -1,7 +1,7 @@
 {
   "name": "@antonytm/mcp-sitecore-server",
   "mcpName": "io.github.Antonytm/mcp-sitecore-server",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Sitecore Community MCP: read/write access to Sitecore XM Cloud and XM/XP over the Authoring and Management API, the Item Service, GraphQL Edge and Sitecore PowerShell Extensions",
   "license": "Apache-2.0",
   "repository": {

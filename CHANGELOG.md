@@ -12,6 +12,23 @@ Our versioning strategy is as follows:
 - Minor: non-breaking feature additions – no breaking changes (e.g. new tools, improvements)
 - Major: new features + breaking changes (e.g. SDK upgrades, tool renames, protocol revisions)
 
+## 2.0.1
+
+### 🛠 Changed
+
+- **Scripts now run as the `shell` site with `Context.Database` pinned to `master`**, the same
+  context the Content Editor and the SPE ISE use. Sitecore applies a template's `__Default workflow`
+  to a created item only when `Context.Site.EnableWorkflow` is true; the remoting endpoint otherwise
+  resolves its site from the request host, which on a multi-site CM is a content site with workflow
+  off — so items created through `run-powershell-script` (and every SPE-backed tool) landed outside
+  their workflow, silently, while the same create in the Content Editor landed in Draft. Every script
+  is wrapped in a `SiteContextSwitcher` + `DatabaseSwitcher`; a `try` block opens no scope in
+  PowerShell, so output, variables and `return` are unchanged. Visible differences: `[Sitecore.Context]::Site.Name`
+  reads `shell` inside a script, and created items now carry their template's default workflow. New
+  settings `POWERSHELL_SITE_CONTEXT` (default `shell`; empty restores the previous behaviour) and
+  `POWERSHELL_CONTEXT_DATABASE` (default `master`). `sc_site=shell` on the query string was measured and
+  rejected: the shell site redirects to its login page before SPE's basic-auth handler runs.
+
 ## 2.0.0
 
 _Released 2026-09 — a fourth API surface, a tool surface a third smaller per operation, on the v2

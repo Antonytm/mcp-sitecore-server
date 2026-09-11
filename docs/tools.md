@@ -100,7 +100,7 @@ existing section without its ID is rejected for creating a duplicate.
     - [x] `item-service-get-item-descendants`: returns the descendants of an item by ID
 - [x] Sitecore PowerShell
   - [x] `get-powershell-documentation`: the SPE command reference, revealed progressively. No arguments returns an index of all 129 commands with one-line summaries (~11KB); `command` returns the full page for up to 5 named commands; `search` finds a command by what it does; `category` lists one group. It no longer returns the whole corpus in one result, and the pages for commands that only work inside the SPE console's own UI (`Show-*`, `Invoke-JavaScript`, `Read-Variable`, …) are not bundled at all — nothing reachable over the `remoting` service can call them.
-  - [x] `run-powershell-script`: runs a PowerShell script and returns the output; its description points at the [`guide://bulk-update`](./guides.md) resource for the safe mass-write pattern
+  - [x] `run-powershell-script`: runs a PowerShell script and returns the output; its description points at the [`guide://bulk-update`](./guides.md) resource for the safe mass-write pattern. Like every SPE-backed tool it runs as the `shell` site with `master` as the context database (`POWERSHELL_SITE_CONTEXT` / `POWERSHELL_CONTEXT_DATABASE` in [configuration](./configuration.md)), so an item a script creates receives its template's default workflow exactly as it would from the Content Editor
   - [x] Security
     - [x] `security-get-current-user`: returns the current user
     - [x] `security-get-user`: returns users by exact `identity` or wildcard `filter` (supply one)
