@@ -12,6 +12,13 @@ Our versioning strategy is as follows:
 - Minor: non-breaking feature additions – no breaking changes (e.g. new tools, improvements)
 - Major: new features + breaking changes (e.g. SDK upgrades, tool renames, protocol revisions)
 
+## 2.0.3
+
+### 📝 Documentation
+
+- Add unique hint to authorization roles in `docs/sitecore-setup.md` so Sitecore doesn't merge
+  them into a single element (#70).
+
 ## 2.0.2
 
 ### 🛠 Changed
