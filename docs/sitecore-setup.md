@@ -101,8 +101,8 @@ deploy it to `App_Config/Include/zzz/` on the CM so it patches after SPE's own c
         <remoting enabled="true">
           <authorization>
             <add Permission="Allow" IdentityType="Role" Identity="sitecore\PowerShell Extensions Remoting"/>
-            <add Permission="Allow" IdentityType="Role" Identity="sitecore\Developer"/>
-            <add Permission="Allow" IdentityType="Role" Identity="sitecore\IsAdministrator"/>
+            <add hint="spe 1" Permission="Allow" IdentityType="Role" Identity="sitecore\Developer"/>
+            <add hint="spe 2" Permission="Allow" IdentityType="Role" Identity="sitecore\IsAdministrator"/>
           </authorization>
         </remoting>
         <mediaUpload enabled="true">
