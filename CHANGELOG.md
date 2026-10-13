@@ -12,6 +12,12 @@ Our versioning strategy is as follows:
 - Minor: non-breaking feature additions – no breaking changes (e.g. new tools, improvements)
 - Major: new features + breaking changes (e.g. SDK upgrades, tool renames, protocol revisions)
 
+## 2.0.4
+
+### 🛠 Changed
+
+- `[deps]` Bumped `@antonytm/clixml-parser` to `^0.1.7`.
+
 ## 2.0.3
 
 ### 📝 Documentation
