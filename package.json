@@ -44,7 +44,7 @@
     "docker:linux": "npm run docker:linux:build && npm run docker:linux:push"
   },
   "dependencies": {
-    "@antonytm/clixml-parser": "^0.1.5",
+    "@antonytm/clixml-parser": "^0.1.7",
     "@modelcontextprotocol/node": "^2.0.0",
     "@modelcontextprotocol/server": "^2.0.0",
     "dotenv": "^16.6.1",
