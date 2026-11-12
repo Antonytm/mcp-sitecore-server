@@ -39,6 +39,28 @@ export default tseslint.config(
         },
     },
     {
+        // Tool registration lives in src/; tests register stubs under names of their own.
+        files: ['src/**/*.ts'],
+        rules: {
+            // A tool name is not free-standing: a client prefixes it before sending it to
+            // the model. Claude Code spells that `mcp__<server key>__<tool>`, and the
+            // Anthropic API caps the result at 64 characters -- a tool whose prefixed name
+            // runs over is dropped from the session, with nothing in this server's logs to
+            // say so. The README's own config key is `sitecore-mcp`, so the overhead is
+            // `mcp__` + `sitecore-mcp` + `__` = 19, leaving 45. The longest name today is
+            // `presentation-remove-rendering-parameter` at 39.
+            //
+            // This catches the literal passed to `registerTool`. It cannot see the two
+            // GraphQL tools, whose names are template strings ending in a schema from
+            // `GRAPHQL_SCHEMAS`: `introspection-graphql-` leaves 23 characters for the
+            // schema name at runtime.
+            'no-restricted-syntax': ['error', {
+                selector: "CallExpression[callee.property.name='registerTool'] > Literal[value.length>45]",
+                message: 'Tool name is longer than 45 characters. Prefixed as mcp__<server>__<tool> it overruns the 64-character limit the client enforces, and the tool is silently dropped.',
+            }],
+        },
+    },
+    {
         // Test doubles stub SDK objects structurally; `any` is the point, not debt.
         files: ['tests/**/*.ts'],
         rules: { '@typescript-eslint/no-explicit-any': 'off' },

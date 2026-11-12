@@ -77,6 +77,9 @@ trying to get a PR merged.
   that matches their group — the groups in
   [Tool selection](docs/tool-selection.md) are the directory layout, not a separate
   taxonomy.
+  Keep the name under 45 characters: a client prefixes it (`mcp__<server key>__<tool>`)
+  and the Anthropic API caps the prefixed form at 64, so a longer name is dropped from the
+  session silently. `npm run lint` fails on one.
 - **Item addressing:** a tool that acts on an item takes optional `id` and `path` and
   requires exactly one, validated before anything reaches Sitecore. Don't reintroduce
   `-by-id` / `-by-path` variants.

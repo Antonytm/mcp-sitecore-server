@@ -12,6 +12,27 @@ Our versioning strategy is as follows:
 - Minor: non-breaking feature additions – no breaking changes (e.g. new tools, improvements)
 - Major: new features + breaking changes (e.g. SDK upgrades, tool renames, protocol revisions)
 
+## 2.0.6
+
+### 🛠 Changed
+
+- **`npm run lint` now fails a tool name longer than 45 characters.** A client prefixes the
+  name before the model ever sees it — Claude Code spells it `mcp__<server key>__<tool>` — and
+  the Anthropic API caps the prefixed form at 64 characters, dropping anything longer with
+  nothing in this server's logs to say so. Against the README's own config key, `sitecore-mcp`,
+  the prefix costs 19 characters, which leaves 45. The longest name today is
+  `presentation-remove-rendering-parameter` at 39. The check reads the literal passed to
+  `registerTool`, so it does not see `query-graphql-<schema>` and `introspection-graphql-<schema>`,
+  whose suffix comes from `GRAPHQL_SCHEMAS` at runtime: `introspection-graphql-` leaves 23
+  characters for a schema name.
+
+- `[deps]` Bumped the MCP SDK (`@modelcontextprotocol/server` 2.4, `node` 2.1, `client` 2.4),
+  `express` 5.3, `graphql` 16.15 and `zod` 4.6, plus the dev tooling: `eslint` 10.14,
+  `typescript-eslint` 8.72, `rollup` 4.68, `@rollup/plugin-alias` 6, `@rollup/plugin-commonjs` 29,
+  `cross-env` 10 and `tsc-alias` 1.9.10. Held back at their current majors: `typescript` 7,
+  `vitest` 5, `graphql` 17, `dotenv` 17+ (which logs to stdout by default and would corrupt the
+  stdio transport) and `@types/node` 26 (the engine floor is Node 22).
+
 ## 2.0.5
 
 ### 🛠 Changed

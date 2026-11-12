@@ -64,6 +64,11 @@ easy to undo by accident:
 - `no-explicit-any` is a **warning**: 124 remain across four loosely-typed remote surfaces,
   and turning it into an error would fail CI on debt that predates the linter. Errors are
   the count that must stay at zero.
+- A `no-restricted-syntax` selector fails a `registerTool` name literal over **45**
+  characters. A client prefixes the name (`mcp__<server key>__<tool>`) and the Anthropic API
+  caps that at 64, dropping anything longer with nothing in the server log to show for it;
+  the README's key, `sitecore-mcp`, costs 19. The selector reads a literal, so the two
+  GraphQL tools named from `GRAPHQL_SCHEMAS` are outside it.
 
 ## Architecture
 
@@ -151,7 +156,7 @@ cost before adding descriptions or fields, and measure before you project.
   carry the `.js` extension. `@/*` maps to `src/*`, resolved by `tsc-alias` at build, by
   the rollup alias plugin when bundling, and by `vitest.unit.config.ts` in tests.
 - **Tool naming** is `<group>-<verb>-<noun>`, and the file lives in the directory matching
-  its group.
+  its group. Names stay under 45 characters; see the lint section.
 - **Item addressing:** one tool per operation, addressed by argument. A tool acting on an
   item takes optional `id`/`path` (plus `uniqueId`/`query`/`uri` where the family had them)
   and validates with `requireOneTarget` / `requireAtMostOneTarget` from
