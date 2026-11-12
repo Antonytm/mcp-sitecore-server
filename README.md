@@ -107,6 +107,27 @@ features this server has no API for (briefs, brand kits, personalization variant
 tests), and nothing stops a client from connecting both. For building, migrating, auditing
 and operating Sitecore solutions, this server is the one with the depth.
 
+## How this compares to the Sitecore Developer MCP
+
+Sitecore also hosts a **Developer MCP** for SitecoreAI: 13 tools for sites, content types,
+content items and components. Every one has an equivalent here. Called the same way from
+the same client against the same environment (medians per action):
+
+| Action                     | Developer MCP | This server          |
+| -------------------------- | ------------- | -------------------- |
+| Reads (8 tools)            | 0.9–4.2 s     | 0.3–1.3 s            |
+| Single-item writes (4)     | 2.9–4.3 s     | 1.1–2.1 s            |
+| `create_component`         | 12 s, 1 call  | 10 s across 7 calls  |
+
+Per call, this server was 2–4× faster. The Developer MCP's strength is composite
+operations: its `create_component` writes the rendering, parameters template, datasource
+folder and site availability in one call, which an agent finishes sooner than seven. The
+two wrote the same items. We also hit a few defects in the Developer MCP's update tools,
+which have been reported to Sitecore.
+
+The full method, tool mapping and results are in
+[Comparison with the Sitecore Developer MCP](docs/developer-mcp-comparison.md).
+
 ## Documentation and community resources
 
 - [Preparing your Sitecore instance](docs/sitecore-setup.md) — SPE Remoting, the Item Service, GraphQL keys, and the config patch that enables them
@@ -116,6 +137,7 @@ and operating Sitecore solutions, this server is the one with the depth.
 - [Tool selection](docs/tool-selection.md) — `TOOL_GROUPS`, `DISABLED_TOOLS` and `TOOL_PROFILE`
 - [Guides](docs/guides.md) — the `guide://compose-page`, `guide://bulk-update` and `guide://diagnose-connection` resources, and when each is offered
 - [Docker images](docs/docker.md) — the published Linux and Windows images
+- [Comparison with the Sitecore Developer MCP](docs/developer-mcp-comparison.md) — tool mapping, benchmark and output parity
 - [Changelog](CHANGELOG.md) — what's new in 2.0 and its breaking changes
 
 Community resources:
