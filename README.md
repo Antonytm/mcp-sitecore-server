@@ -109,9 +109,9 @@ and operating Sitecore solutions, this server is the one with the depth.
 
 ## How this compares to the Sitecore Developer MCP
 
-Sitecore also hosts a **Developer MCP** for SitecoreAI: 13 tools for sites, content types,
-content items and components. Every one has an equivalent here. Called the same way from
-the same client against the same environment (medians per action):
+Sitecore also hosts a **Developer MCP** for SitecoreAI, **still in beta**: 13 tools for
+sites, content types, content items and components. Every one has an equivalent here.
+Called the same way from the same client against the same environment (medians per action):
 
 | Action                     | Developer MCP | This server          |
 | -------------------------- | ------------- | -------------------- |
@@ -123,7 +123,8 @@ Per call, this server was 2–4× faster. The Developer MCP's strength is compos
 operations: its `create_component` writes the rendering, parameters template, datasource
 folder and site availability in one call, which an agent finishes sooner than seven. The
 two wrote the same items. We also hit a few defects in the Developer MCP's update tools,
-which have been reported to Sitecore.
+which have been reported to Sitecore — it is a beta, so expect its tools and behaviour to
+keep changing.
 
 The full method, tool mapping and results are in
 [Comparison with the Sitecore Developer MCP](docs/developer-mcp-comparison.md).

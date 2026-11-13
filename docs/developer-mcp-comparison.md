@@ -5,6 +5,11 @@ Sitecore runs a hosted **Developer MCP** for SitecoreAI alongside its Marketer M
 components (JSON renderings). Every one of them has an equivalent here, built from one or more
 of this server's tools.
 
+**The Developer MCP is still in beta.** Its tool set, behaviour and output can change without
+notice, and the defects noted below are the kind a beta is expected to have. Everything on
+this page is a snapshot, not a verdict — re-check against the current release before relying
+on any of it.
+
 This page compares the two on that shared surface: what each call costs, what it writes, and
 where each server fits. It was measured on 12 November 2026 against a SitecoreAI sandbox
 environment, with this server at 2.0.5.
@@ -29,6 +34,7 @@ environment, with this server at 2.0.5.
 | **Hosting**      | Self-hosted, stdio or streamable HTTP                                                      | Hosted by Sitecore at `https://edge-platform.sitecorecloud.io/mcp/developer`   |
 | **Auth**         | Your CM's credentials (automation client, Item Service, SPE)                               | OAuth as the signed-in Sitecore Cloud Portal user                              |
 | **Platforms**    | SitecoreAI and XM/XP, including a local Docker CM                                          | SitecoreAI only                                                                |
+| **Maturity**     | Generally available, 2.0.5 at the time of writing                                          | Beta                                                                           |
 | **Tools**        | 121 tools across items, templates, presentation, media, security, indexing and more        | 13 tools for sites, content types, content items and components                |
 | **Abstraction**  | Sitecore's own model: items, templates, fields, renderings                                  | Its own model: content types, components, categories, availability             |
 | **Backed by**    | Authoring GraphQL, Item Service, SPE and Edge GraphQL                                      | A REST API at `xmapps-api.sitecorecloud.io` (`/api/v1/content-types`, `/components`) |
@@ -168,5 +174,6 @@ Nothing stops a client from connecting both.
 
 During testing we also hit a handful of defects in the Developer MCP, for example renaming a
 component also changing its `componentName`, and a partial `update_content_type` clearing the
-description. They have been reported to Sitecore. Check the Developer MCP's current behaviour
+description. They have been reported to Sitecore. The server is in beta, so these may already
+be fixed and other behaviour may have moved — check the Developer MCP's current behaviour
 before relying on update operations.
